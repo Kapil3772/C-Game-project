@@ -16,12 +16,12 @@ int main(int argc, char **argv)
 
     // Create a window
     SDL_Window *window = SDL_CreateWindow(
-        "SDL2 Window",           // Window title
-        SDL_WINDOWPOS_UNDEFINED, // X position
-        SDL_WINDOWPOS_UNDEFINED, // Y position
-        SCREEN_WIDTH,            // Width
-        SCREEN_HEIGHT,           // Height
-        0                        // Flags
+        "Game",                 // Window title
+        SDL_WINDOWPOS_CENTERED, // X position
+        SDL_WINDOWPOS_CENTERED, // Y position
+        SCREEN_WIDTH,           // Width
+        SCREEN_HEIGHT,          // Height
+        0                       // Flags
     );
 
     if (!window)
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
         // Set the draw color (RGB format: red, green, blue, alpha)
         SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
-        SDL_RenderClear(renderer);                          // Clear the screen
+        SDL_RenderClear(renderer);
 
         SDL_RenderPresent(renderer);
     }
