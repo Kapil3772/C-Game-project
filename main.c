@@ -52,16 +52,33 @@ int main(int argc, char **argv)
             case SDL_QUIT:
                 running = 0;
                 break;
+            case SDL_KEYDOWN:
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_UP:
+                    printf("Up arrow key pressed\n");
+                    break;
+                default:
+                    break;
+                }
+            }
+
             default:
                 break;
             }
+
+            // Set the draw color (RGB format: red, green, blue, alpha)
+            SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
+            SDL_RenderClear(renderer);
+
+            // Draw a rectangle
+            SDL_Rect rect1 = {SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
+            SDL_RenderFillRect(renderer, &rect1);
+
+            SDL_RenderPresent(renderer);
         }
-
-        // Set the draw color (RGB format: red, green, blue, alpha)
-        SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
-        SDL_RenderClear(renderer);
-
-        SDL_RenderPresent(renderer);
     }
 
     return 0;
