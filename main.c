@@ -38,9 +38,34 @@ int main(int argc, char **argv)
     if (!renderer)
     {
         printf("Error: Failed to create renderer\nSDL_Error: '%s'\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
         return 1;
     }
 
+    // load image into memory
+    SDL_Surface *surface = IMG_Load("data/images/entities/player.png");
+    if (!surface)
+    {
+        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    // load image into graphics hardware
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    if (!texture)
+    {
+        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
     // Player hitbox
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
@@ -99,5 +124,9 @@ int main(int argc, char **argv)
         }
     }
 
+    // Clean up
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     return 0;
 }
