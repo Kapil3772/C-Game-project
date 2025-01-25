@@ -2,6 +2,7 @@
 #include "src/include/SDL2/SDL.h"
 #include "src/include/SDL2/SDL_timer.h"
 #include "src/include/SDL2/SDL_image.h"
+#include "src/gameFiles/gameEntities.h"
 
 #define SCREEN_WIDTH 1200
 #define SCREEN_HEIGHT 720
@@ -40,10 +41,10 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // Draw a rectangle
-    SDL_Rect rect1 = {SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    // Player hitbox
+    SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
-    SDL_RenderFillRect(renderer, &rect1);
+    SDL_RenderFillRect(renderer, &player_hitbox);
 
     SDL_RenderPresent(renderer);
     // Main loop flag
@@ -65,10 +66,20 @@ int main(int argc, char **argv)
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_UP:
-                    printf("Up arrow key pressed\n");
-                    rect1.y -= 5;
-
+                    printf("Up arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
+                    player_hitbox.y -= PLAYER_VELOCITY_Y;
                     break;
+                case SDLK_DOWN:
+                    printf("Down arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
+                    player_hitbox.y += PLAYER_VELOCITY_Y;
+                    break;
+                case SDLK_LEFT:
+                    printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
+                    player_hitbox.x -= PLAYER_VELOCITY_X;
+                    break;
+                case SDLK_RIGHT:
+                    printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
+                    player_hitbox.x += PLAYER_VELOCITY_X;
                 default:
                     break;
                 }
@@ -82,7 +93,7 @@ int main(int argc, char **argv)
             SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
             SDL_RenderClear(renderer);
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
-            SDL_RenderFillRect(renderer, &rect1);
+            SDL_RenderFillRect(renderer, &player_hitbox);
 
             SDL_RenderPresent(renderer);
         }
