@@ -16,7 +16,12 @@ int main(int argc, char **argv)
         printf("Error: SDL failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
         return 1;
     }
-
+    // Initialize SDL_image for png support
+    if (SDL_Init(IMG_INIT_PNG) < 0)
+    {
+        printf("Error: SDL_image failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
     // Create a window
     SDL_Window *window = SDL_CreateWindow(
         "Game",                 // Window title
@@ -45,14 +50,11 @@ int main(int argc, char **argv)
     }
 
     // load image into memory
-    SDL_Surface *surface = IMG_Load("data/images/entities/player.png");
+    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/player.png");
     if (!surface)
     {
         printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
+        // return 1;
     }
 
     // load image into graphics hardware
@@ -61,17 +63,13 @@ int main(int argc, char **argv)
     if (!texture)
     {
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
+        // return 1;
     }
     // Player hitbox
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
-    SDL_RenderFillRect(renderer, &player_hitbox);
 
-    SDL_RenderPresent(renderer);
+    SDL_Rect Wall_hitbox = {SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, PLAYER_WIDTH, PLAYER_HEIGHT};
+
     // Main loop flag
     int running = 1;
 
@@ -92,11 +90,26 @@ int main(int argc, char **argv)
                 {
                 case SDLK_UP:
                     printf("Up arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    player_hitbox.y -= PLAYER_VELOCITY_Y;
+                    if (top_collision(player_hitbox, Wall_hitbox))
+                    {
+                        printf("Upward collision detected\n");
+                    }
+                    else
+                    {
+                        player_hitbox.y -= PLAYER_VELOCITY_Y;
+                    }
                     break;
                 case SDLK_DOWN:
                     printf("Down arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    player_hitbox.y += PLAYER_VELOCITY_Y;
+                    if (bottom_collision(player_hitbox, Wall_hitbox))
+                    {
+                        printf("Downward collision detected\n");
+                    }
+                    else
+                    {
+                        player_hitbox.y += PLAYER_VELOCITY_Y;
+                    }
+
                     break;
                 case SDLK_LEFT:
                     printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
@@ -104,7 +117,14 @@ int main(int argc, char **argv)
                     break;
                 case SDLK_RIGHT:
                     printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    player_hitbox.x += PLAYER_VELOCITY_X;
+                    if (right_collision(player_hitbox, Wall_hitbox))
+                    {
+                        printf("Right Side Collision Detected\n");
+                    }
+                    else
+                    {
+                        player_hitbox.x += PLAYER_VELOCITY_X;
+                    }
                 default:
                     break;
                 }
@@ -119,7 +139,8 @@ int main(int argc, char **argv)
             SDL_RenderClear(renderer);
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
             SDL_RenderFillRect(renderer, &player_hitbox);
-
+            SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
+            SDL_RenderFillRect(renderer, &Wall_hitbox);
             SDL_RenderPresent(renderer);
         }
     }
