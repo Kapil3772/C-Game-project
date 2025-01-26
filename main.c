@@ -75,6 +75,7 @@ int main(int argc, char **argv)
 
     while (running)
     {
+
         SDL_Event event;
         // Handle events
         while (SDL_PollEvent(&event))
@@ -134,6 +135,8 @@ int main(int argc, char **argv)
                 break;
             }
 
+            // Update Gravity
+
             // Set the draw color (RGB format: red, green, blue, alpha)
             SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
             SDL_RenderClear(renderer);
@@ -143,6 +146,15 @@ int main(int argc, char **argv)
             SDL_RenderFillRect(renderer, &Wall_hitbox);
             SDL_RenderPresent(renderer);
         }
+        player_hitbox.y += GRAVITY;
+        SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
+        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
+        SDL_RenderFillRect(renderer, &player_hitbox);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
+        SDL_RenderFillRect(renderer, &Wall_hitbox);
+        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+        SDL_RenderPresent(renderer);
     }
 
     // Clean up

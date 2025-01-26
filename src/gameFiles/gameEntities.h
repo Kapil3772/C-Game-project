@@ -3,9 +3,10 @@
 #define PLAYER_POS_Y 100
 #define PLAYER_WIDTH 50
 #define PLAYER_HEIGHT 75
+#define GRAVITY 1
 
 float PLAYER_VELOCITY_X = 1;
-float PLAYER_VELOCITY_Y = 1;
+float PLAYER_VELOCITY_Y = 100;
 
 // Physics Entities
 
