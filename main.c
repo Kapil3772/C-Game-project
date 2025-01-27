@@ -66,15 +66,24 @@ int main(int argc, char **argv)
         // return 1;
     }
     // Player hitbox
+    SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
     SDL_Rect Wall_hitbox = {SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, PLAYER_WIDTH, PLAYER_HEIGHT};
 
+    Uint32 lastTime = SDL_GetTicks();
+    Uint32 currentTime;
+    float deltaTime;
     // Main loop flag
     int running = 1;
 
     while (running)
     {
+        currentTime = SDL_GetTicks();
+        deltaTime = (currentTime - lastTime) / 1000.0f; // Convert milliseconds to seconds
+        lastTime = currentTime;
+        printf("Delta Time: %f\n", deltaTime);
 
         SDL_Event event;
         // Handle events
@@ -97,34 +106,35 @@ int main(int argc, char **argv)
                     }
                     else
                     {
-                        player_hitbox.y -= PLAYER_VELOCITY_Y;
+                        player_hitbox.y -= PLAYER_VELOCITY_Y * deltaTime;
                     }
                     break;
                 case SDLK_DOWN:
                     printf("Down arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (bottom_collision(player_hitbox, Wall_hitbox))
+                    if (bottom_collision(player_hitbox, Wall_hitbox) || bottom_window_collision(player_hitbox, window_rect))
                     {
                         printf("Downward collision detected\n");
                     }
                     else
                     {
-                        player_hitbox.y += PLAYER_VELOCITY_Y;
+                        player_hitbox.y += PLAYER_VELOCITY_Y * deltaTime;
                     }
 
                     break;
                 case SDLK_LEFT:
                     printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    player_hitbox.x -= PLAYER_VELOCITY_X;
+                    player_hitbox.x -= PLAYER_VELOCITY_X * deltaTime;
                     break;
                 case SDLK_RIGHT:
                     printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (right_collision(player_hitbox, Wall_hitbox))
+
+                    if (right_collision(player_hitbox, Wall_hitbox) || rside_window_collision(player_hitbox, window_rect))
                     {
                         printf("Right Side Collision Detected\n");
                     }
                     else
                     {
-                        player_hitbox.x += PLAYER_VELOCITY_X;
+                        player_hitbox.x += PLAYER_VELOCITY_X * deltaTime;
                     }
                 default:
                     break;
@@ -138,15 +148,21 @@ int main(int argc, char **argv)
             // Update Gravity
 
             // Set the draw color (RGB format: red, green, blue, alpha)
-            SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
-            SDL_RenderFillRect(renderer, &player_hitbox);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
-            SDL_RenderFillRect(renderer, &Wall_hitbox);
-            SDL_RenderPresent(renderer);
+            // SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
+            // SDL_RenderClear(renderer);
+            // SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
+            // SDL_RenderFillRect(renderer, &Wall_hitbox);
+            // SDL_RenderPresent(renderer);
         }
-        player_hitbox.y += GRAVITY;
+        if (bottom_window_collision(player_hitbox, window_rect))
+        {
+            printf("Bottom window collision detected\n");
+        }
+        else
+        {
+            player_hitbox.y += (int)(GRAVITY * deltaTime * 100);
+        }
+
         SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
@@ -159,6 +175,7 @@ int main(int argc, char **argv)
 
     // Clean up
     SDL_DestroyRenderer(renderer);
+    SDL_DestroyTexture(texture);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;

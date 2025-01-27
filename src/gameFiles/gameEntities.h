@@ -3,11 +3,10 @@
 #define PLAYER_POS_Y 100
 #define PLAYER_WIDTH 50
 #define PLAYER_HEIGHT 75
-#define GRAVITY 1
+#define GRAVITY 3
 
-float PLAYER_VELOCITY_X = 1;
-float PLAYER_VELOCITY_Y = 100;
-
+float PLAYER_VELOCITY_X = 50;
+float PLAYER_VELOCITY_Y = 140;
 // Physics Entities
 
 // Function to check collision between two SDL_Rects
@@ -41,6 +40,32 @@ int bottom_collision(SDL_Rect, SDL_Rect);
 int bottom_collision(SDL_Rect rect1, SDL_Rect rect2)
 {
     if ((rect1.y + rect1.h > rect2.y) && (rect1.x + rect1.w > rect2.x) && (rect1.x < rect2.x + rect2.w))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int bottom_window_collision(SDL_Rect, SDL_Rect);
+int bottom_window_collision(SDL_Rect rect1, SDL_Rect wrect)
+{
+    if ((rect1.y + rect1.h) > wrect.h + wrect.y)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int rside_window_collision(SDL_Rect, SDL_Rect);
+int rside_window_collision(SDL_Rect rect1, SDL_Rect wrect)
+{
+    if ((rect1.x < wrect.x) || (rect1.x + rect1.w > wrect.x + wrect.w))
     {
         return 1;
     }
