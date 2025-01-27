@@ -3,8 +3,7 @@
 #define PLAYER_POS_Y 100
 #define PLAYER_WIDTH 50
 #define PLAYER_HEIGHT 75
-#define GRAVITY 3
-
+#define GRAVITY 4.00
 float PLAYER_VELOCITY_X = 50;
 float PLAYER_VELOCITY_Y = 140;
 // Physics Entities
@@ -62,15 +61,35 @@ int bottom_window_collision(SDL_Rect rect1, SDL_Rect wrect)
     }
 }
 
-int rside_window_collision(SDL_Rect, SDL_Rect);
-int rside_window_collision(SDL_Rect rect1, SDL_Rect wrect)
+int side_window_collision(SDL_Rect, SDL_Rect);
+int side_window_collision(SDL_Rect rect1, SDL_Rect wrect)
 {
-    if ((rect1.x < wrect.x) || (rect1.x + rect1.w > wrect.x + wrect.w))
-    {
-        return 1;
-    }
-    else
+    if ((rect1.x >= wrect.x) && (rect1.x + rect1.w <= wrect.x + wrect.w))
     {
         return 0;
     }
+    else
+    {
+        return 1;
+    }
+}
+
+float get_dampness(float);
+float get_dampness(float dampness)
+{
+    int dampness_switch = 0;
+    if (dampness < GRAVITY)
+    {
+        dampness_switch = 1;
+    }
+    if (dampness_switch)
+    {
+        dampness += 1;
+    }
+    else
+    {
+        dampness = 0;
+    }
+
+    return dampness;
 }

@@ -6,7 +6,7 @@
 
 #define SCREEN_WIDTH 1200
 #define SCREEN_HEIGHT 720
-
+float dampness = 0.0f;
 int main(int argc, char **argv)
 {
 
@@ -65,6 +65,21 @@ int main(int argc, char **argv)
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
         // return 1;
     }
+
+    SDL_Surface *background = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/space.jpg");
+    if (!background)
+    {
+        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
+        // return 1;
+    }
+
+    SDL_Texture *bg_texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    if (!bg_texture)
+    {
+        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
+        // return 1;
+    }
     // Player hitbox
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -83,7 +98,6 @@ int main(int argc, char **argv)
         currentTime = SDL_GetTicks();
         deltaTime = (currentTime - lastTime) / 1000.0f; // Convert milliseconds to seconds
         lastTime = currentTime;
-        printf("Delta Time: %f\n", deltaTime);
 
         SDL_Event event;
         // Handle events
@@ -94,6 +108,7 @@ int main(int argc, char **argv)
             case SDL_QUIT:
                 running = 0;
                 break;
+            // Player Movements
             case SDL_KEYDOWN:
             {
                 switch (event.key.keysym.sym)
@@ -106,7 +121,8 @@ int main(int argc, char **argv)
                     }
                     else
                     {
-                        player_hitbox.y -= PLAYER_VELOCITY_Y * deltaTime;
+                        printf("Player Jumped\n");
+                        player_hitbox.y -= PLAYER_VELOCITY_Y;
                     }
                     break;
                 case SDLK_DOWN:
@@ -117,24 +133,31 @@ int main(int argc, char **argv)
                     }
                     else
                     {
-                        player_hitbox.y += PLAYER_VELOCITY_Y * deltaTime;
+                        player_hitbox.y += PLAYER_VELOCITY_Y;
                     }
 
                     break;
                 case SDLK_LEFT:
                     printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    player_hitbox.x -= PLAYER_VELOCITY_X * deltaTime;
+                    if (right_collision(player_hitbox, Wall_hitbox) || side_window_collision(player_hitbox, window_rect))
+                    {
+                        printf("Left Side Collision Detected\n");
+                    }
+                    else
+                    {
+                        player_hitbox.x -= PLAYER_VELOCITY_X;
+                    }
                     break;
                 case SDLK_RIGHT:
                     printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
 
-                    if (right_collision(player_hitbox, Wall_hitbox) || rside_window_collision(player_hitbox, window_rect))
+                    if (right_collision(player_hitbox, Wall_hitbox) || side_window_collision(player_hitbox, window_rect))
                     {
                         printf("Right Side Collision Detected\n");
                     }
                     else
                     {
-                        player_hitbox.x += PLAYER_VELOCITY_X * deltaTime;
+                        player_hitbox.x += PLAYER_VELOCITY_X;
                     }
                 default:
                     break;
@@ -160,16 +183,14 @@ int main(int argc, char **argv)
         }
         else
         {
-            player_hitbox.y += (int)(GRAVITY * deltaTime * 100);
+            player_hitbox.y += ((int)(GRAVITY * deltaTime * 100));
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 225); // Black
         SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
-        SDL_RenderFillRect(renderer, &player_hitbox);
+        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
         SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
         SDL_RenderFillRect(renderer, &Wall_hitbox);
-        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
         SDL_RenderPresent(renderer);
     }
 
