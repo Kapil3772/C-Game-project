@@ -17,7 +17,7 @@ int main(int argc, char **argv)
         return 1;
     }
     // Initialize SDL_image for png support
-    if (SDL_Init(IMG_INIT_PNG) < 0)
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
     {
         printf("Error: SDL_image failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
         return 1;
@@ -82,6 +82,9 @@ int main(int argc, char **argv)
     }
     // Player hitbox
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_Rect rightWindow_wall = {SCREEN_WIDTH, 0, 100, WALL_THICKNESS};
+    SDL_Rect bottomWindow_wall = {0, SCREEN_HEIGHT, SCREEN_WIDTH, WALL_THICKNESS};
+    SDL_Rect leftWindow_wall = {-WALL_THICKNESS, 0, WALL_THICKNESS, SCREEN_HEIGHT};
 
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
@@ -127,7 +130,7 @@ int main(int argc, char **argv)
                     break;
                 case SDLK_DOWN:
                     printf("Down arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (bottom_collision(player_hitbox, Wall_hitbox) || bottom_window_collision(player_hitbox, window_rect))
+                    if (bottom_collision(player_hitbox, Wall_hitbox) || bottom_window_collision(player_hitbox, bottomWindow_wall))
                     {
                         printf("Downward collision detected\n");
                     }
@@ -139,7 +142,7 @@ int main(int argc, char **argv)
                     break;
                 case SDLK_LEFT:
                     printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (right_collision(player_hitbox, Wall_hitbox) || side_window_collision(player_hitbox, window_rect))
+                    if (left_collision(player_hitbox, Wall_hitbox) || left_collision(player_hitbox, leftWindow_wall))
                     {
                         printf("Left Side Collision Detected\n");
                     }
@@ -151,9 +154,10 @@ int main(int argc, char **argv)
                 case SDLK_RIGHT:
                     printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
 
-                    if (right_collision(player_hitbox, Wall_hitbox) || side_window_collision(player_hitbox, window_rect))
+                    if (right_collision(player_hitbox, Wall_hitbox) || right_collision(player_hitbox, rightWindow_wall))
                     {
                         printf("Right Side Collision Detected\n");
+                        player_hitbox.x = window_rect.x + window_rect.w - PLAYER_WIDTH;
                     }
                     else
                     {
@@ -186,8 +190,14 @@ int main(int argc, char **argv)
             player_hitbox.y += ((int)(GRAVITY * deltaTime * 100));
         }
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 225); // Black
+        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 225); // Black
         SDL_RenderClear(renderer);
+
+        SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
+        SDL_RenderFillRect(renderer, &leftWindow_wall);
+        SDL_RenderFillRect(renderer, &bottomWindow_wall);
+        SDL_RenderFillRect(renderer, &rightWindow_wall);
+
         SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
         SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
         SDL_RenderFillRect(renderer, &Wall_hitbox);
