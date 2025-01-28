@@ -1,13 +1,15 @@
 
-#define PLAYER_POS_X 100
-#define PLAYER_POS_Y 100
-#define PLAYER_WIDTH 41
-#define PLAYER_HEIGHT 45
-#define GRAVITY 2.00
-#define WALL_THICKNESS 50
+#define PLAYER_POS_X 0
+#define PLAYER_POS_Y 0
+#define PLAYER_WIDTH 48
+#define PLAYER_HEIGHT 48
+#define GRAVITY 0.00
+#define WALL_THICKNESS 150
+#include "globals.h"
+#include "gameRender.h"
 
-float PLAYER_VELOCITY_X = 10;
-float PLAYER_VELOCITY_Y = 100;
+float PLAYER_VELOCITY_X = 48;
+float PLAYER_VELOCITY_Y = 48;
 // Physics Entities
 
 // Function to check collision between two SDL_Rects

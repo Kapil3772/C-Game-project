@@ -1,12 +1,19 @@
+// system includes
 #include <stdio.h>
+#include <stdbool.h>
 #include "src/include/SDL2/SDL.h"
 #include "src/include/SDL2/SDL_timer.h"
 #include "src/include/SDL2/SDL_image.h"
+
+// my includes
 #include "src/gameFiles/gameEntities.h"
 
-#define SCREEN_WIDTH 1200
-#define SCREEN_HEIGHT 720
-float dampness = 0.0f;
+// Constants
+#define SCREEN_WIDTH 816
+#define SCREEN_HEIGHT 384
+#define TARGET_FPS 60
+#define FRAME_DELAY (1000 / TARGET_FPS) // 16.67ms per frame
+
 int main(int argc, char **argv)
 {
 
@@ -54,7 +61,7 @@ int main(int argc, char **argv)
     if (!surface)
     {
         printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        // return 1;
+        return 1;
     }
 
     // load image into graphics hardware
@@ -63,44 +70,47 @@ int main(int argc, char **argv)
     if (!texture)
     {
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        // return 1;
+        return 1;
     }
 
-    SDL_Surface *background = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/space.jpg");
-    if (!background)
-    {
-        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        // return 1;
-    }
-
-    SDL_Texture *bg_texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    if (!bg_texture)
-    {
-        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        // return 1;
-    }
     // Player hitbox
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-    SDL_Rect rightWindow_wall = {SCREEN_WIDTH, 0, 100, WALL_THICKNESS};
-    SDL_Rect bottomWindow_wall = {0, SCREEN_HEIGHT, SCREEN_WIDTH, WALL_THICKNESS};
-    SDL_Rect leftWindow_wall = {-WALL_THICKNESS, 0, WALL_THICKNESS, SCREEN_HEIGHT};
+    SDL_Rect rightWindow_wall = {SCREEN_WIDTH - 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
+    SDL_Rect bottomWindow_wall = {0, SCREEN_HEIGHT - 5, SCREEN_WIDTH, WALL_THICKNESS};
+    SDL_Rect leftWindow_wall = {-WALL_THICKNESS + 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
+    SDL_Rect topWindow_wall = {0, -WALL_THICKNESS + 5, SCREEN_WIDTH, WALL_THICKNESS};
 
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
-    SDL_Rect Wall_hitbox = {SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, PLAYER_WIDTH, PLAYER_HEIGHT};
-
     Uint32 lastTime = SDL_GetTicks();
-    Uint32 currentTime;
-    float deltaTime;
-    // Main loop flag
-    int running = 1;
+    Uint32 frameStartTime;
+    int total_time_for_executing_currentFrame;
+
+    bool movement[2] = {false, false};
+
+    // MAIN GAME LOOP
+    bool running = 1;
+
+    // for tracking frames
+    int i = 0;
+    int seconds = 0;
+    int frames_counter = 0;
+    int frames_per_second = 0;
 
     while (running)
     {
-        currentTime = SDL_GetTicks();
-        deltaTime = (currentTime - lastTime) / 1000.0f; // Convert milliseconds to seconds
-        lastTime = currentTime;
+        i++;
+        frames_counter++;
+        if (i % 60 == 0)
+        {
+            seconds++;
+            frames_per_second = frames_counter;
+            frames_counter = 0;
+        }
+        frameStartTime = SDL_GetTicks();
+
+        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 225); // Black
+        SDL_RenderClear(renderer);
 
         SDL_Event event;
         // Handle events
@@ -117,91 +127,60 @@ int main(int argc, char **argv)
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_UP:
-                    printf("Up arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (top_collision(player_hitbox, Wall_hitbox))
-                    {
-                        printf("Upward collision detected\n");
-                    }
-                    else
-                    {
-                        printf("Player Jumped\n");
-                        player_hitbox.y -= PLAYER_VELOCITY_Y;
-                    }
-                    break;
+                {
+                    printf("Player Jumped\n");
+                    movement[0] = true;
+                }
+                break;
                 case SDLK_DOWN:
-                    printf("Down arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (bottom_collision(player_hitbox, Wall_hitbox) || bottom_window_collision(player_hitbox, bottomWindow_wall))
-                    {
-                        printf("Downward collision detected\n");
-                    }
-                    else
-                    {
-                        player_hitbox.y += PLAYER_VELOCITY_Y;
-                    }
-
-                    break;
+                {
+                    player_hitbox.y += PLAYER_VELOCITY_Y;
+                }
+                break;
                 case SDLK_LEFT:
-                    printf("Left arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-                    if (left_collision(player_hitbox, Wall_hitbox) || left_collision(player_hitbox, leftWindow_wall))
-                    {
-                        printf("Left Side Collision Detected\n");
-                    }
-                    else
-                    {
-                        player_hitbox.x -= PLAYER_VELOCITY_X;
-                    }
-                    break;
+                {
+                    player_hitbox.x -= PLAYER_VELOCITY_X;
+                }
+                break;
                 case SDLK_RIGHT:
-                    printf("Right arrow key pressed\t Player POS:(%d, %d)\n", player_hitbox.x, player_hitbox.y);
-
-                    if (right_collision(player_hitbox, Wall_hitbox) || right_collision(player_hitbox, rightWindow_wall))
-                    {
-                        printf("Right Side Collision Detected\n");
-                        player_hitbox.x = window_rect.x + window_rect.w - PLAYER_WIDTH;
-                    }
-                    else
-                    {
-                        player_hitbox.x += PLAYER_VELOCITY_X;
-                    }
+                {
+                    player_hitbox.x += PLAYER_VELOCITY_X;
+                }
                 default:
                     break;
                 }
             }
 
-            default:
-                break;
+            case SDL_KEYUP:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_UP:
+                    movement[0] = false;
+                    break;
+                case SDLK_DOWN:
+                    movement[1] = false;
+                    break;
+
+                default:
+                    break;
+                }
             }
 
-            // Update Gravity
-
-            // Set the draw color (RGB format: red, green, blue, alpha)
-            // SDL_SetRenderDrawColor(renderer, 0, 128, 255, 255); // Blue color
-            // SDL_RenderClear(renderer);
-            // SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
-            // SDL_RenderFillRect(renderer, &Wall_hitbox);
-            // SDL_RenderPresent(renderer);
+            SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
+            SDL_RenderFillRect(renderer, &leftWindow_wall);
+            SDL_RenderFillRect(renderer, &bottomWindow_wall);
+            SDL_RenderFillRect(renderer, &rightWindow_wall);
+            SDL_RenderFillRect(renderer, &topWindow_wall);
+            SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+            SDL_RenderPresent(renderer);
         }
-        if (bottom_window_collision(player_hitbox, window_rect))
+        total_time_for_executing_currentFrame = SDL_GetTicks() - frameStartTime;
+        // printf("Time taken for current frame: %d\n", total_time_for_executing_currentFrame);
+        if (total_time_for_executing_currentFrame < FRAME_DELAY)
         {
-            printf("Bottom window collision detected\n");
+            SDL_Delay(FRAME_DELAY - total_time_for_executing_currentFrame);
+            printf("Frame %d took %d ms\t Total time elapsed : %d \t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
         }
-        else
-        {
-            player_hitbox.y += ((int)(GRAVITY * deltaTime * 100));
-        }
-
-        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 225); // Black
-        SDL_RenderClear(renderer);
-
-        SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
-        SDL_RenderFillRect(renderer, &leftWindow_wall);
-        SDL_RenderFillRect(renderer, &bottomWindow_wall);
-        SDL_RenderFillRect(renderer, &rightWindow_wall);
-
-        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 220, 255); // Green color
-        SDL_RenderFillRect(renderer, &Wall_hitbox);
-        SDL_RenderPresent(renderer);
     }
 
     // Clean up
@@ -209,5 +188,6 @@ int main(int argc, char **argv)
     SDL_DestroyTexture(texture);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
     return 0;
 }
