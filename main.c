@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     {
         i++;
         frames_counter++;
-        if (i % 60 == 0)
+        if (i % TARGET_FPS == 0)
         {
             seconds++;
             frames_per_second = frames_counter;
@@ -174,12 +174,16 @@ int main(int argc, char **argv)
             SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
             SDL_RenderPresent(renderer);
         }
+
+
+
+        // Fixed Frame rate control
         total_time_for_executing_currentFrame = SDL_GetTicks() - frameStartTime;
         // printf("Time taken for current frame: %d\n", total_time_for_executing_currentFrame);
         if (total_time_for_executing_currentFrame < FRAME_DELAY)
         {
             SDL_Delay(FRAME_DELAY - total_time_for_executing_currentFrame);
-            printf("Frame %d took %d ms\t Total time elapsed : %d \t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
+            // printf("Frame %d took %d ms\t Total time elapsed : %d s\t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
         }
     }
 
