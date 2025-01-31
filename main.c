@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     }
 
     // load image into memory
-    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/player.png");
+    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/Actor1_1.png");
     if (!surface)
     {
         printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
@@ -128,13 +128,14 @@ int main(int argc, char **argv)
                 {
                 case SDLK_UP:
                 {
-                    printf("Player Jumped\n");
+                    printf("Up arrow key pressed\n");
                     movement[0] = true;
                 }
                 break;
                 case SDLK_DOWN:
                 {
-                    player_hitbox.y += PLAYER_VELOCITY_Y;
+                    printf("Down arrow key pressed\n");
+                    movement[1] = true;
                 }
                 break;
                 case SDLK_LEFT:
@@ -150,32 +151,36 @@ int main(int argc, char **argv)
                     break;
                 }
             }
+            break;
+
+            default:
+                break;
 
             case SDL_KEYUP:
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_UP:
+                    printf("Up arrow key released\n");
                     movement[0] = false;
                     break;
                 case SDLK_DOWN:
+                    printf("Down arrow key released\n");
                     movement[1] = false;
                     break;
-
                 default:
                     break;
                 }
             }
-
-            SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
-            SDL_RenderFillRect(renderer, &leftWindow_wall);
-            SDL_RenderFillRect(renderer, &bottomWindow_wall);
-            SDL_RenderFillRect(renderer, &rightWindow_wall);
-            SDL_RenderFillRect(renderer, &topWindow_wall);
-            SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
-            SDL_RenderPresent(renderer);
+            break;
         }
-
-
+        player_hitbox.y = player_hitbox.y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
+        SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
+        SDL_RenderFillRect(renderer, &leftWindow_wall);
+        SDL_RenderFillRect(renderer, &bottomWindow_wall);
+        SDL_RenderFillRect(renderer, &rightWindow_wall);
+        SDL_RenderFillRect(renderer, &topWindow_wall);
+        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+        SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
         total_time_for_executing_currentFrame = SDL_GetTicks() - frameStartTime;
