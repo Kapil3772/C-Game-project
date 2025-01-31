@@ -1,3 +1,4 @@
+#ifndef GAME_ENTITIES_H
 
 #define PLAYER_POS_X 0
 #define PLAYER_POS_Y 0
@@ -12,7 +13,9 @@ float PLAYER_VELOCITY_X = 5;
 float PLAYER_VELOCITY_Y = 5;
 
 bool fps_flag = false;
+
 // Physics Entities
+bool collision_flag[4] = {false, false, false, false};
 
 // Function to check collision between two SDL_Rects
 int top_collision(SDL_Rect, SDL_Rect);
@@ -31,7 +34,7 @@ int top_collision(SDL_Rect rect1, SDL_Rect rect2)
 int right_collision(SDL_Rect, SDL_Rect);
 int right_collision(SDL_Rect rect1, SDL_Rect rect2)
 {
-    if ((rect1.x + rect1.w > rect2.x) && (rect1.x < rect2.x + rect2.w) && (rect1.y + rect1.h > rect2.y) && (rect1.y < rect2.y + rect2.h))
+    if ((rect1.x + rect1.w >= rect2.x) && (rect1.x <= rect2.x + rect2.w) && (rect1.y + rect1.h >= rect2.y) && (rect1.y <= rect2.y + rect2.h))
     {
         return 1;
     }
@@ -112,3 +115,5 @@ float get_dampness(float dampness)
 
     return dampness;
 }
+
+#endif

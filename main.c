@@ -206,8 +206,16 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+        if (right_collision(player_hitbox, collision_area))
+        {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        }
         SDL_RenderDrawRect(renderer, &collision_area);
+        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
