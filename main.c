@@ -73,14 +73,17 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // Player hitbox
+    // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_Rect rightWindow_wall = {SCREEN_WIDTH - 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
     SDL_Rect bottomWindow_wall = {0, SCREEN_HEIGHT - 5, SCREEN_WIDTH, WALL_THICKNESS};
     SDL_Rect leftWindow_wall = {-WALL_THICKNESS + 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
     SDL_Rect topWindow_wall = {0, -WALL_THICKNESS + 5, SCREEN_WIDTH, WALL_THICKNESS};
-
+    // Player entity rect
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
+
+    // Collision detection rects
+    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 150};
 
     Uint32 lastTime = SDL_GetTicks();
     Uint32 frameStartTime;
@@ -150,6 +153,10 @@ int main(int argc, char **argv)
                     movement[3] = true;
                 }
                 break;
+                case SDLK_f:
+                {
+                    fps_flag = !fps_flag;
+                }
                 default:
                     break;
                 }
@@ -189,14 +196,18 @@ int main(int argc, char **argv)
                 break;
             }
         }
+        // Update Player position
         player_hitbox.y = player_hitbox.y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
         player_hitbox.x = player_hitbox.x + ((int)(movement[2]) - (int)(movement[3])) * PLAYER_VELOCITY_X;
+
+        // Rendering
         SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
         SDL_RenderFillRect(renderer, &leftWindow_wall);
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
         SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+        SDL_RenderDrawRect(renderer, &collision_area);
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
@@ -205,7 +216,10 @@ int main(int argc, char **argv)
         if (total_time_for_executing_currentFrame < FRAME_DELAY)
         {
             SDL_Delay(FRAME_DELAY - total_time_for_executing_currentFrame);
-            // printf("Frame %d took %d ms\t Total time elapsed : %d s\t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
+            if (fps_flag)
+            {
+                printf("Frame %d took %d ms\t Total time elapsed : %d s\t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
+            }
         }
     }
 

@@ -10,6 +10,8 @@
 
 float PLAYER_VELOCITY_X = 5;
 float PLAYER_VELOCITY_Y = 5;
+
+bool fps_flag = false;
 // Physics Entities
 
 // Function to check collision between two SDL_Rects
