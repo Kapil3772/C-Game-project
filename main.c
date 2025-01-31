@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     Uint32 frameStartTime;
     int total_time_for_executing_currentFrame;
 
-    bool movement[2] = {false, false};
+    bool movement[4] = {false, false, false, false};
 
     // MAIN GAME LOOP
     bool running = 1;
@@ -138,25 +138,25 @@ int main(int argc, char **argv)
                     movement[1] = true;
                 }
                 break;
-                case SDLK_LEFT:
-                {
-                    player_hitbox.x -= PLAYER_VELOCITY_X;
-                }
-                break;
                 case SDLK_RIGHT:
                 {
-                    player_hitbox.x += PLAYER_VELOCITY_X;
+                    printf("Right arrow key pressed\n");
+                    movement[2] = true;
                 }
+                break;
+                case SDLK_LEFT:
+                {
+                    printf("Left arrow key pressed\n");
+                    movement[3] = true;
+                }
+                break;
                 default:
                     break;
                 }
             }
             break;
-
-            default:
-                break;
-
             case SDL_KEYUP:
+            {
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_UP:
@@ -167,13 +167,30 @@ int main(int argc, char **argv)
                     printf("Down arrow key released\n");
                     movement[1] = false;
                     break;
+                case SDLK_RIGHT:
+                {
+                    printf("Right arrow key released\n");
+                    movement[2] = false;
+                }
+                break;
+                case SDLK_LEFT:
+                {
+                    printf("Left arrow key released\n");
+                    movement[3] = false;
+                }
+                break;
                 default:
                     break;
                 }
             }
             break;
+
+            default:
+                break;
+            }
         }
         player_hitbox.y = player_hitbox.y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
+        player_hitbox.x = player_hitbox.x + ((int)(movement[2]) - (int)(movement[3])) * PLAYER_VELOCITY_X;
         SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
         SDL_RenderFillRect(renderer, &leftWindow_wall);
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
