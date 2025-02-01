@@ -6,12 +6,13 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-Isrc/include",   
-                "-Lsrc/lib",       
+                "-Isrc/include",
+                "-Lsrc/lib",
                 "-o",
-                "build/game",      
-                "main.c",          
-                "-lmingw32",      
+                "build/game",
+                "main.c",
+                "src/gameFiles/gameEntities.c",       
+                "-lmingw32",
                 "-lSDL2main",
                 "-lSDL2",
                 "-lSDL2_image"

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "gamerender.h": "c"
+        "gamerender.h": "c",
+        "gameentities.h": "c"
     }
 }
