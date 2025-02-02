@@ -73,6 +73,20 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    SDL_Surface *loadingScreen_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png");
+    if (!loadingScreen_surface)
+    {
+        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Texture *loadingScreen = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(loadingScreen_surface);
+    if (!loadingScreen)
+    {
+        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
     // SDL_Texture *enemy_texture = load_image()
 
     // Wall entities rects
@@ -88,15 +102,12 @@ int main(int argc, char **argv)
     SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 150};
 
     // Loading Screen or Game Menu
-    bool loading = 1;
+    bool loading = 0;
     bool running = 1;
-
+    SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
+    SDL_RenderPresent(renderer);
     while (loading)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
-
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -107,7 +118,16 @@ int main(int argc, char **argv)
                 running = 0;
                 break;
             case SDL_KEYDOWN:
-                loading = 0;
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_e:
+                {
+                    loading = 0;
+                }
+                break;
+                default:
+                    break;
+                }
                 break;
             default:
                 break;

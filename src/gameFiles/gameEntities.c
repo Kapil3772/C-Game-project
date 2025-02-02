@@ -1,17 +1,27 @@
 #include "gameEntities.h"
 #include <stdio.h>
-
+// variable definations
 float PLAYER_VELOCITY_X = 5;
-float PLAYER_VELOCITY_Y = 5;
+float PLAYER_VELOCITY_Y = 0;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
+const float TERMINAL_VELOCITY = 9.8f;
+
+// functions
+float min(float a, float b)
+{
+    return (a < b) ? a : b;
+}
 
 void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y)
 {
     // horizontal movement update
-    player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
+
     // vertical movement update
-    player_hitbox->y = player_hitbox->y + movement_y * PLAYER_VELOCITY_Y;
+    PLAYER_VELOCITY_Y = min(TERMINAL_VELOCITY, PLAYER_VELOCITY_Y + 0.1);
+    player_hitbox->y = player_hitbox->y + movement_y + PLAYER_VELOCITY_Y;
+
+    player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
 }
 
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)

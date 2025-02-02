@@ -20,6 +20,7 @@ extern bool fps_flag;
 extern SDL_Rect player_hitbox, collision_area;
 extern SDL_Texture *player_texture;
 extern int player_movement[2];
+extern const float TERMINAL_VELOCITY;
 // Physics Entities
 extern bool collision_flag[4];
 
@@ -28,6 +29,8 @@ typedef struct
     int x, y;
     int w, h;
 } PhysicsEntity;
+
+float min(float, float);
 
 void updatePlayer(SDL_Rect *, int movement_x, int movement_y);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
