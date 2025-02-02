@@ -6,10 +6,12 @@ float PLAYER_VELOCITY_Y = 5;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
 
-void updatePlayer(SDL_Rect *player_hitbox, bool movement[4])
+void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y)
 {
-    player_hitbox->y = player_hitbox->y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
-    player_hitbox->x = player_hitbox->x + ((int)(movement[2]) - (int)(movement[3])) * PLAYER_VELOCITY_X;
+    // horizontal movement update
+    player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
+    // vertical movement update
+    player_hitbox->y = player_hitbox->y + movement_y * PLAYER_VELOCITY_Y;
 }
 
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)

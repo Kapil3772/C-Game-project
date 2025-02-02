@@ -39,3 +39,8 @@ Making a fun and simple 2D platformer game.
 
 - Floating platform with small arena where you fight PVE(Player vs Environment)
 - Defeating all enemies will move to the next level with increased difficulty
+
+### Learned lessons in this project
+
+1. Use texture atlas..
+2. Pre-Calculate things before function calling to make it more readable and optimized.

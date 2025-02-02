@@ -73,6 +73,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    // SDL_Texture *enemy_texture = load_image()
+
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_Rect rightWindow_wall = {SCREEN_WIDTH - 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
@@ -85,14 +87,39 @@ int main(int argc, char **argv)
     // Collision detection rects
     SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 150};
 
-    Uint32 lastTime = SDL_GetTicks();
+    // Loading Screen or Game Menu
+    bool loading = 1;
+    bool running = 1;
+
+    while (loading)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                loading = 0;
+                running = 0;
+                break;
+            case SDL_KEYDOWN:
+                loading = 0;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     Uint32 frameStartTime;
     int total_time_for_executing_currentFrame;
-
     bool movement[4] = {false, false, false, false};
 
     // MAIN GAME LOOP
-    bool running = 1;
 
     // for tracking frames
     int i = 0;
@@ -112,8 +139,11 @@ int main(int argc, char **argv)
         }
         frameStartTime = SDL_GetTicks();
 
-        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 225); // Black
+        SDL_SetRenderDrawColor(renderer, 225, 225, 225, 225); // Black Screen
         SDL_RenderClear(renderer);
+
+        // Update Player position
+        updatePlayer(&player_hitbox, movement[3] - movement[2], 0); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
 
         SDL_Event event;
         // Handle events
@@ -141,15 +171,15 @@ int main(int argc, char **argv)
                     movement[1] = true;
                 }
                 break;
-                case SDLK_RIGHT:
-                {
-                    printf("Right arrow key pressed\n");
-                    movement[2] = true;
-                }
-                break;
                 case SDLK_LEFT:
                 {
                     printf("Left arrow key pressed\n");
+                    movement[2] = true;
+                }
+                break;
+                case SDLK_RIGHT:
+                {
+                    printf("Right arrow key pressed\n");
                     movement[3] = true;
                 }
                 break;
@@ -174,15 +204,15 @@ int main(int argc, char **argv)
                     printf("Down arrow key released\n");
                     movement[1] = false;
                     break;
-                case SDLK_RIGHT:
-                {
-                    printf("Right arrow key released\n");
-                    movement[2] = false;
-                }
-                break;
                 case SDLK_LEFT:
                 {
                     printf("Left arrow key released\n");
+                    movement[2] = false;
+                }
+                break;
+                case SDLK_RIGHT:
+                {
+                    printf("Right arrow key released\n");
                     movement[3] = false;
                 }
                 break;
@@ -196,8 +226,6 @@ int main(int argc, char **argv)
                 break;
             }
         }
-        // Update Player position
-        updatePlayer(&player_hitbox, movement);
 
         // Rendering
         SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
@@ -205,14 +233,14 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        // if (right_collision(player_hitbox, collision_area))
-        // {
-        //     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        // }
-        // else
-        // {
-        //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        // }
+        if (right_collision(player_hitbox, collision_area))
+        {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        }
         SDL_RenderDrawRect(renderer, &collision_area);
         renderPlayer(renderer, player_texture, &player_hitbox);
 

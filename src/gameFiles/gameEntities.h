@@ -1,5 +1,8 @@
 #ifndef GAME_ENTITIES_H
 
+#include <stdbool.h>
+extern bool running, loading;
+
 #define PLAYER_POS_X 0
 #define PLAYER_POS_Y 0
 #define PLAYER_WIDTH 32
@@ -16,7 +19,7 @@ extern bool movement[4];
 extern bool fps_flag;
 extern SDL_Rect player_hitbox, collision_area;
 extern SDL_Texture *player_texture;
-
+extern int player_movement[2];
 // Physics Entities
 extern bool collision_flag[4];
 
@@ -26,7 +29,7 @@ typedef struct
     int w, h;
 } PhysicsEntity;
 
-void updatePlayer(SDL_Rect *, bool movement[4]);
+void updatePlayer(SDL_Rect *, int movement_x, int movement_y);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 // Function to check collision between two SDL_Rects
