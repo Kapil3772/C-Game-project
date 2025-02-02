@@ -12,22 +12,22 @@
 
 extern float PLAYER_VELOCITY_X;
 extern float PLAYER_VELOCITY_Y;
-
+extern bool movement[4];
 extern bool fps_flag;
+extern SDL_Rect player_hitbox, collision_area;
+extern SDL_Texture *player_texture;
 
 // Physics Entities
 extern bool collision_flag[4];
 
 typedef struct
 {
-    float x, y;
-    const char type;
-    float w, h;
-    float velocity_x, velocity_y;
+    int x, y;
+    int w, h;
 } PhysicsEntity;
 
-void updateEntity(PhysicsEntity *entity, bool movement[4]);
-void renderEntity(SDL_Renderer *renderer, PhysicsEntity *entity);
+void updatePlayer(SDL_Rect *, bool movement[4]);
+void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 // Function to check collision between two SDL_Rects
 int top_collision(SDL_Rect, SDL_Rect);

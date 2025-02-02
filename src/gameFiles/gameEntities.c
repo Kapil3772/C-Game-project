@@ -6,14 +6,15 @@ float PLAYER_VELOCITY_Y = 5;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
 
-void updateEntity(PhysicsEntity *entity, bool movement[4])
+void updatePlayer(SDL_Rect *player_hitbox, bool movement[4])
 {
-    printf("ok");
+    player_hitbox->y = player_hitbox->y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
+    player_hitbox->x = player_hitbox->x + ((int)(movement[2]) - (int)(movement[3])) * PLAYER_VELOCITY_X;
 }
 
-void renderEntity(SDL_Renderer *renderer, PhysicsEntity *entity)
+void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
 {
-    printf("ok");
+    SDL_RenderCopy(renderer, texture, NULL, rect);
 }
 
 int top_collision(SDL_Rect rect1, SDL_Rect rect2)

@@ -65,9 +65,9 @@ int main(int argc, char **argv)
     }
 
     // load image into graphics hardware
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture *player_texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
-    if (!texture)
+    if (!player_texture)
     {
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
         return 1;
@@ -197,8 +197,7 @@ int main(int argc, char **argv)
             }
         }
         // Update Player position
-        player_hitbox.y = player_hitbox.y + ((int)(movement[1]) - (int)(movement[0])) * PLAYER_VELOCITY_Y;
-        player_hitbox.x = player_hitbox.x + ((int)(movement[2]) - (int)(movement[3])) * PLAYER_VELOCITY_X;
+        updatePlayer(&player_hitbox, movement);
 
         // Rendering
         SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
@@ -206,16 +205,17 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        if (right_collision(player_hitbox, collision_area))
-        {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        }
-        else
-        {
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        }
+        // if (right_collision(player_hitbox, collision_area))
+        // {
+        //     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        // }
+        // else
+        // {
+        //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        // }
         SDL_RenderDrawRect(renderer, &collision_area);
-        SDL_RenderCopy(renderer, texture, NULL, &player_hitbox);
+        renderPlayer(renderer, player_texture, &player_hitbox);
+
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 
     // Clean up
     SDL_DestroyRenderer(renderer);
-    SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(player_texture);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
