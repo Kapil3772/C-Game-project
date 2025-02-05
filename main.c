@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
     // Collision detection rects
-    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 150};
+    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 100};
 
     // Loading Screen or Game Menu
     bool loading = 0;
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 
     Uint32 frameStartTime;
     int total_time_for_executing_currentFrame;
-    bool movement[4] = {false, false, false, false};
+    bool movement[2] = {false, false};
 
     // MAIN GAME LOOP
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         // Update Player position
-        updatePlayer(&player_hitbox, movement[3] - movement[2], 0); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
 
         SDL_Event event;
         // Handle events
@@ -182,25 +182,24 @@ int main(int argc, char **argv)
                 case SDLK_UP:
                 {
                     printf("Up arrow key pressed\n");
-                    movement[0] = true;
+                    PLAYER_VELOCITY_Y = -5;
                 }
                 break;
                 case SDLK_DOWN:
                 {
                     printf("Down arrow key pressed\n");
-                    movement[1] = true;
                 }
                 break;
                 case SDLK_LEFT:
                 {
                     printf("Left arrow key pressed\n");
-                    movement[2] = true;
+                    movement[0] = true;
                 }
                 break;
                 case SDLK_RIGHT:
                 {
                     printf("Right arrow key pressed\n");
-                    movement[3] = true;
+                    movement[1] = true;
                 }
                 break;
                 case SDLK_f:
@@ -218,22 +217,20 @@ int main(int argc, char **argv)
                 {
                 case SDLK_UP:
                     printf("Up arrow key released\n");
-                    movement[0] = false;
                     break;
                 case SDLK_DOWN:
                     printf("Down arrow key released\n");
-                    movement[1] = false;
                     break;
                 case SDLK_LEFT:
                 {
                     printf("Left arrow key released\n");
-                    movement[2] = false;
+                    movement[0] = false;
                 }
                 break;
                 case SDLK_RIGHT:
                 {
                     printf("Right arrow key released\n");
-                    movement[3] = false;
+                    movement[1] = false;
                 }
                 break;
                 default:
@@ -253,7 +250,7 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        if (right_collision(player_hitbox, collision_area))
+        if (collision(&player_hitbox, &collision_area))
         {
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         }
