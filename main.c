@@ -100,9 +100,10 @@ int main(int argc, char **argv)
 
     // Collision detection rects
     SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 40};
+    SDL_Rect collision_area2 = {100, 84, 100, 40};
 
     // Loading Screen or Game Menu
-    bool loading = 1;
+    bool loading = 0;
     bool running = 1;
     SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
     while (loading)
@@ -139,7 +140,6 @@ int main(int argc, char **argv)
     int total_time_for_executing_currentFrame;
     bool movement[2] = {false, false};
     isJumping = false;
-    
 
     // MAIN GAME LOOP
 
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         // Update Player position
-        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, &collision_area2, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
         isJumping = false;
 
         SDL_Event event;
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        if (collision2(&player_hitbox, &collision_area))
+        if (collisionCheck(&player_hitbox, &collision_area))
         {
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         }
@@ -265,6 +265,7 @@ int main(int argc, char **argv)
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         }
         SDL_RenderDrawRect(renderer, &collision_area);
+        SDL_RenderDrawRect(renderer, &collision_area2);
         renderPlayer(renderer, player_texture, &player_hitbox);
 
         SDL_RenderPresent(renderer);
