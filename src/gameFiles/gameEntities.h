@@ -26,7 +26,7 @@ extern int player_movement[2];
 extern const float TERMINAL_VELOCITY;
 // Physics Entities
 extern bool collision_flag[4];
-
+extern SDL_Texture tex[];
 typedef enum
 {
     NO_COLLISION = 0,
