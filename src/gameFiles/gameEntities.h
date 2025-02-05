@@ -26,6 +26,14 @@ extern const float TERMINAL_VELOCITY;
 // Physics Entities
 extern bool collision_flag[4];
 
+typedef enum
+{
+    NO_COLLISION = 0,
+    COLLISION_TOP = 1 << 0,
+    COLLISION_BOTTOM = 1 << 1,
+    COLLISION_LEFT = 1 << 2,
+    COLLISION_RIGHT = 1 << 3
+} CollisionSide;
 
 typedef struct
 {
@@ -39,11 +47,6 @@ void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collisio
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 // Function to check collision between two SDL_Rects
-int top_collision(SDL_Rect, SDL_Rect);
-bool collision(SDL_Rect *, SDL_Rect *);
-int left_collision(SDL_Rect, SDL_Rect);
-int bottom_collision(SDL_Rect, SDL_Rect);
-int bottom_window_collision(SDL_Rect, SDL_Rect);
-int side_window_collision(SDL_Rect, SDL_Rect);
+CollisionSide collision2(SDL_Rect *, SDL_Rect *);
 
 #endif

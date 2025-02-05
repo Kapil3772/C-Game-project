@@ -20,11 +20,18 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     collision_flag[1] = false;
     collision_flag[2] = false;
     collision_flag[3] = false;
-    int x = collision(player_hitbox, collision_area);
-
+    CollisionSide collision = collision2(player_hitbox, collision_area);
+    if (collision & COLLISION_LEFT)
+    {
+        player_hitbox->x = collision_area->x - player_hitbox->w; // clamping player to the left of the platform
+    }
+    if (collision & COLLISION_RIGHT)
+    {
+        player_hitbox->x = collision_area->x + collision_area->w; // clamping player to the right of the platform
+    }
     player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
 
-    if (collision_flag[1])
+    if (collision & COLLISION_TOP)
     {
         player_hitbox->y = collision_area->y - player_hitbox->h; // clamping player to the top of the platform
         PLAYER_VELOCITY_Y = 0;
@@ -33,6 +40,12 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     {
         PLAYER_VELOCITY_Y = -5.0f;
     }
+    if (collision & COLLISION_BOTTOM)
+    {
+        PLAYER_VELOCITY_Y = 0.5;
+        player_hitbox->y = collision_area->y + collision_area->h + 1; // clamping player to the bottom of the platform
+    }
+
     player_hitbox->y = player_hitbox->y + movement_y + PLAYER_VELOCITY_Y;
 
     PLAYER_VELOCITY_Y = min(TERMINAL_VELOCITY, PLAYER_VELOCITY_Y + GRAVITY_PULL);
@@ -43,78 +56,24 @@ void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
     SDL_RenderCopy(renderer, texture, NULL, rect);
 }
 
-bool collision(SDL_Rect *rect1, SDL_Rect *rect2)
+
+
+CollisionSide collision2(SDL_Rect *rect1, SDL_Rect *rect2)
 {
+    CollisionSide collision = NO_COLLISION;
+
     if ((rect1->x + rect1->w >= rect2->x) && (rect1->x <= rect2->x + rect2->w) && (rect1->y + rect1->h >= rect2->y) && (rect1->y <= rect2->y + rect2->h))
     {
-        int top_overlap = rect2->y + rect2->h - rect1->y;    // Top side of rect1 colliding with rect2
-        int bottom_overlap = rect1->y + rect1->h - rect2->y; // Bottom side of rect1 colliding with rect2
-        int left_overlap = rect2->x + rect2->w - rect1->x;   // Left side of rect1 colliding with rect2
-        int right_overlap = rect1->x + rect1->w - rect2->x;  // Right side of rect1 colliding with rect2
+        int bottom_overlap = rect2->y + rect2->h - rect1->y;
+        int top_overlap = rect1->y + rect1->h - rect2->y;
+        int left_overlap = rect1->x + rect1->w - rect2->x;
+        int right_overlap = rect2->x + rect2->w - rect1->x;
 
-        // Determine the smallest overlap
-        int min_overlap = top_overlap;
+        int min_overlap = bottom_overlap;
 
-        if (bottom_overlap < min_overlap)
+        if (top_overlap < min_overlap)
         {
-            // printf("Bottom collision\n");
-            min_overlap = bottom_overlap;
-            collision_flag[1] = true; // bottom
-        }
-        else if (left_overlap < min_overlap)
-        {
-            // printf("Left collision\n");
-            min_overlap = left_overlap;
-            collision_flag[2] = true; // left
-        }
-        else if (right_overlap < min_overlap)
-        {
-            // printf("Right collision\n");
-            min_overlap = right_overlap;
-            collision_flag[3] = true; // right
-        }
-        else
-        {
-            // printf("Top collision\n");
-            collision_flag[0] = true; // top
-        }
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int top_collision(SDL_Rect rect1, SDL_Rect rect2)
-{
-    if ((rect1.y < rect2.y + rect2.h && rect1.x + rect1.w > rect2.x) && (rect1.y < rect2.y + rect2.h && rect1.x < rect2.x + rect2.w))
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int left_collision(SDL_Rect rect1, SDL_Rect rect2)
-{
-    if (rect1.x < rect2.x + rect2.w && rect1.y + rect1.h > rect2.y && rect1.y < rect2.y + rect2.h)
-    {
-
-        return 1;
-        int bottom_overlap = rect2.y + rect2.h - rect1.y; // Top side of rect2 colliding with rect1
-        int top_overlap = rect1.y + rect1.h - rect2.y;    // Bottom side of rect2 colliding with rect1
-        int right_overlap = rect2.x + rect2.w - rect1.x;  // Left side of rect2 colliding with rect1
-        int left_overlap = rect1.x + rect1.w - rect2.x;   // Right side of rect2 colliding with rect1
-
-        // Determine the smallest overlap
-        int min_overlap = top_overlap;
-
-        if (bottom_overlap < min_overlap)
-        {
-            min_overlap = bottom_overlap;
+            min_overlap = top_overlap;
         }
 
         if (left_overlap < min_overlap)
@@ -126,45 +85,25 @@ int left_collision(SDL_Rect rect1, SDL_Rect rect2)
         {
             min_overlap = right_overlap;
         }
+
+        if (min_overlap == bottom_overlap)
+        {
+            collision = (CollisionSide)(collision | COLLISION_BOTTOM);
+        }
+        if (min_overlap == top_overlap)
+        {
+            collision = (CollisionSide)(collision | COLLISION_TOP);
+        }
+        if (min_overlap == left_overlap)
+        {
+            collision = (CollisionSide)(collision | COLLISION_LEFT);
+        }
+        if (min_overlap == right_overlap)
+        {
+            collision = (CollisionSide)(collision | COLLISION_RIGHT);
+        }
     }
-    else
-    {
-        return 0;
-    }
+
+    return collision;
 }
 
-int bottom_collision(SDL_Rect rect1, SDL_Rect rect2)
-{
-    if ((rect1.y + rect1.h > rect2.y) && (rect1.x + rect1.w > rect2.x) && (rect1.x < rect2.x + rect2.w))
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int bottom_window_collision(SDL_Rect rect1, SDL_Rect wrect)
-{
-    if ((rect1.y + rect1.h) > wrect.h + wrect.y)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int side_window_collision(SDL_Rect rect1, SDL_Rect wrect)
-{
-    if ((rect1.x >= wrect.x) && (rect1.x + rect1.w <= wrect.x + wrect.w))
-    {
-        return 0;
-    }
-    else
-    {
-        return 1;
-    }
-}

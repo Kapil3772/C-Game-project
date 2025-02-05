@@ -99,10 +99,10 @@ int main(int argc, char **argv)
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
     // Collision detection rects
-    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 100};
+    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 40};
 
     // Loading Screen or Game Menu
-    bool loading = 0;
+    bool loading = 1;
     bool running = 1;
     SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
     while (loading)
@@ -139,6 +139,7 @@ int main(int argc, char **argv)
     int total_time_for_executing_currentFrame;
     bool movement[2] = {false, false};
     isJumping = false;
+    
 
     // MAIN GAME LOOP
 
@@ -147,6 +148,9 @@ int main(int argc, char **argv)
     int seconds = 0;
     int frames_counter = 0;
     int frames_per_second = 0;
+    // for displaying fps only once per second
+    static int log_counter = 0;
+    const int LOG_INTERVAL = 60;
 
     while (running)
     {
@@ -252,7 +256,7 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        if (collision(&player_hitbox, &collision_area))
+        if (collision2(&player_hitbox, &collision_area))
         {
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         }
@@ -266,15 +270,21 @@ int main(int argc, char **argv)
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
+        if (fps_flag)
+        {
+            log_counter++;
+            if (log_counter >= LOG_INTERVAL)
+            {
+                printf("Frame %d took %d ms\t Total time elapsed : %d s\t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
+                log_counter = 0; // Reset the counter
+            }
+        }
         total_time_for_executing_currentFrame = SDL_GetTicks() - frameStartTime;
+
         // printf("Time taken for current frame: %d\n", total_time_for_executing_currentFrame);
         if (total_time_for_executing_currentFrame < FRAME_DELAY)
         {
             SDL_Delay(FRAME_DELAY - total_time_for_executing_currentFrame);
-            if (fps_flag)
-            {
-                printf("Frame %d took %d ms\t Total time elapsed : %d s\t True FPS = %d\n", i, total_time_for_executing_currentFrame, seconds, frames_per_second);
-            }
         }
     }
 
