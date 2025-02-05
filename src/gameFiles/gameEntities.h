@@ -17,6 +17,7 @@ extern float GRAVITY_PULL;
 extern float PLAYER_VELOCITY_X;
 extern float PLAYER_VELOCITY_Y;
 extern bool movement[2];
+extern bool isJumping;
 extern bool fps_flag;
 extern SDL_Rect player_hitbox, collision_area;
 extern SDL_Texture *player_texture;
@@ -24,6 +25,7 @@ extern int player_movement[2];
 extern const float TERMINAL_VELOCITY;
 // Physics Entities
 extern bool collision_flag[4];
+
 
 typedef struct
 {
@@ -33,7 +35,7 @@ typedef struct
 
 float min(float, float);
 
-void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area);
+void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, bool isJumping);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 // Function to check collision between two SDL_Rects

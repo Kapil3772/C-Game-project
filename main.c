@@ -105,9 +105,9 @@ int main(int argc, char **argv)
     bool loading = 0;
     bool running = 1;
     SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
-    SDL_RenderPresent(renderer);
     while (loading)
     {
+        SDL_RenderPresent(renderer);
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -138,6 +138,7 @@ int main(int argc, char **argv)
     Uint32 frameStartTime;
     int total_time_for_executing_currentFrame;
     bool movement[2] = {false, false};
+    isJumping = false;
 
     // MAIN GAME LOOP
 
@@ -163,7 +164,8 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         // Update Player position
-        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        isJumping = false;
 
         SDL_Event event;
         // Handle events
@@ -181,24 +183,24 @@ int main(int argc, char **argv)
                 {
                 case SDLK_UP:
                 {
-                    printf("Up arrow key pressed\n");
-                    PLAYER_VELOCITY_Y = -5;
+                    // printf("Up arrow key pressed\n");
+                    isJumping = true;
                 }
                 break;
                 case SDLK_DOWN:
                 {
-                    printf("Down arrow key pressed\n");
+                    // printf("Down arrow key pressed\n");
                 }
                 break;
                 case SDLK_LEFT:
                 {
-                    printf("Left arrow key pressed\n");
+                    // printf("Left arrow key pressed\n");
                     movement[0] = true;
                 }
                 break;
                 case SDLK_RIGHT:
                 {
-                    printf("Right arrow key pressed\n");
+                    // printf("Right arrow key pressed\n");
                     movement[1] = true;
                 }
                 break;
@@ -216,20 +218,20 @@ int main(int argc, char **argv)
                 switch (event.key.keysym.sym)
                 {
                 case SDLK_UP:
-                    printf("Up arrow key released\n");
+                    // printf("Up arrow key released\n");
                     break;
                 case SDLK_DOWN:
-                    printf("Down arrow key released\n");
+                    // printf("Down arrow key released\n");
                     break;
                 case SDLK_LEFT:
                 {
-                    printf("Left arrow key released\n");
+                    // printf("Left arrow key released\n");
                     movement[0] = false;
                 }
                 break;
                 case SDLK_RIGHT:
                 {
-                    printf("Right arrow key released\n");
+                    // printf("Right arrow key released\n");
                     movement[1] = false;
                 }
                 break;

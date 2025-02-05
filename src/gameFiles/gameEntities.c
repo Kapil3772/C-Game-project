@@ -7,22 +7,32 @@ bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
 const float TERMINAL_VELOCITY = 7.0f;
 float GRAVITY_PULL = 0.21f;
-
+bool isJumping;
 // functions
 float min(float a, float b)
 {
     return (a < b) ? a : b;
 }
 
-void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area)
+void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, bool isJumping)
 {
-    bool collision_flag[4] = {false, false, false, false}; // resetting collision every frame
+    collision_flag[0] = false;
+    collision_flag[1] = false;
+    collision_flag[2] = false;
+    collision_flag[3] = false;
+    int x = collision(player_hitbox, collision_area);
 
-    if (collision(player_hitbox, collision_area))
-    {
-    }
     player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
 
+    if (collision_flag[1])
+    {
+        player_hitbox->y = collision_area->y - player_hitbox->h; // clamping player to the top of the platform
+        PLAYER_VELOCITY_Y = 0;
+    }
+    if (isJumping)
+    {
+        PLAYER_VELOCITY_Y = -5.0f;
+    }
     player_hitbox->y = player_hitbox->y + movement_y + PLAYER_VELOCITY_Y;
 
     PLAYER_VELOCITY_Y = min(TERMINAL_VELOCITY, PLAYER_VELOCITY_Y + GRAVITY_PULL);
@@ -35,33 +45,37 @@ void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
 
 bool collision(SDL_Rect *rect1, SDL_Rect *rect2)
 {
-    if ((rect1->x + rect1->w > rect2->x) && (rect1->x < rect2->x + rect2->w) && (rect1->y + rect1->h > rect2->y) && (rect1->y < rect2->y + rect2->h))
+    if ((rect1->x + rect1->w >= rect2->x) && (rect1->x <= rect2->x + rect2->w) && (rect1->y + rect1->h >= rect2->y) && (rect1->y <= rect2->y + rect2->h))
     {
-        int bottom_overlap = rect2->y + rect2->h - rect1->y; // Top side of rect2 colliding with rect1
-        int top_overlap = rect1->y + rect1->h - rect2->y;    // Bottom side of rect2 colliding with rect1
-        int right_overlap = rect2->x + rect2->w - rect1->x;  // Left side of rect2 colliding with rect1
-        int left_overlap = rect1->x + rect1->w - rect2->x;   // Right side of rect2 colliding with rect1
+        int top_overlap = rect2->y + rect2->h - rect1->y;    // Top side of rect1 colliding with rect2
+        int bottom_overlap = rect1->y + rect1->h - rect2->y; // Bottom side of rect1 colliding with rect2
+        int left_overlap = rect2->x + rect2->w - rect1->x;   // Left side of rect1 colliding with rect2
+        int right_overlap = rect1->x + rect1->w - rect2->x;  // Right side of rect1 colliding with rect2
 
         // Determine the smallest overlap
         int min_overlap = top_overlap;
 
         if (bottom_overlap < min_overlap)
         {
+            // printf("Bottom collision\n");
             min_overlap = bottom_overlap;
             collision_flag[1] = true; // bottom
         }
         else if (left_overlap < min_overlap)
         {
+            // printf("Left collision\n");
             min_overlap = left_overlap;
             collision_flag[2] = true; // left
         }
         else if (right_overlap < min_overlap)
         {
+            // printf("Right collision\n");
             min_overlap = right_overlap;
             collision_flag[3] = true; // right
         }
         else
         {
+            // printf("Top collision\n");
             collision_flag[0] = true; // top
         }
         return 1;
