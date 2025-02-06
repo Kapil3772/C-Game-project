@@ -9,8 +9,8 @@
 #include "src/gameFiles/gameEntities.h"
 
 // Constants
-#define SCREEN_WIDTH 816
-#define SCREEN_HEIGHT 384
+#define SCREEN_WIDTH 1020
+#define SCREEN_HEIGHT 720
 #define TARGET_FPS 60
 #define FRAME_DELAY (1000 / TARGET_FPS) // 16.67ms per frame
 
@@ -80,9 +80,39 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    SDL_Texture *loadingScreen = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture *loadingScreen = SDL_CreateTextureFromSurface(renderer, loadingScreen_surface);
     SDL_FreeSurface(loadingScreen_surface);
     if (!loadingScreen)
+    {
+        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Surface *gameBackground_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/gameBackground.png");
+    if (!gameBackground_surface)
+    {
+        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Texture *gameBackground = SDL_CreateTextureFromSurface(renderer, gameBackground_surface);
+    SDL_FreeSurface(gameBackground_surface);
+    if (!gameBackground)
+    {
+        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Surface *collision_area_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/collision_area.png");
+    if (!collision_area_surface)
+    {
+        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Texture *collision_area_texture = SDL_CreateTextureFromSurface(renderer, collision_area_surface);
+    SDL_FreeSurface(collision_area_surface);
+    if (!collision_area_texture)
     {
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
         return 1;
@@ -100,10 +130,10 @@ int main(int argc, char **argv)
 
     // Collision detection rects
     SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 40};
-    SDL_Rect collision_area2 = {100, 84, 100, 40};
+    SDL_Rect collision_area2 = {100, 84, 76, 18};
 
     // Loading Screen or Game Menu
-    bool loading = 0;
+    bool loading = 1;
     bool running = 1;
     SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
     while (loading)
@@ -251,6 +281,7 @@ int main(int argc, char **argv)
         }
 
         // Rendering
+        SDL_RenderCopy(renderer, gameBackground, NULL, &window_rect);
         SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
         SDL_RenderFillRect(renderer, &leftWindow_wall);
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
@@ -265,7 +296,7 @@ int main(int argc, char **argv)
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         }
         SDL_RenderDrawRect(renderer, &collision_area);
-        SDL_RenderDrawRect(renderer, &collision_area2);
+        SDL_RenderCopy(renderer, collision_area_texture, NULL, &collision_area2);
         renderPlayer(renderer, player_texture, &player_hitbox);
 
         SDL_RenderPresent(renderer);

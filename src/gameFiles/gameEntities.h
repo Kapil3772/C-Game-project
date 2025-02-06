@@ -21,7 +21,7 @@ extern bool isJumping;
 extern bool fps_flag;
 extern SDL_Rect player_hitbox, collision_area, collision_area2;
 extern SDL_Rect *colliding_rect;
-extern SDL_Texture *player_texture;
+extern SDL_Texture *player_texture, *loadingScreen, *gameBackground, *collision_area_texture;
 extern int player_movement[2];
 extern const float TERMINAL_VELOCITY;
 // Physics Entities
