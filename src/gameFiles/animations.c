@@ -5,11 +5,10 @@
 #include "SDL2/SDL_image.h"
 #include <stdio.h>
 
-
 // functions
 
 // for loading all texture for a particular animation animation
-Animation load_image(const char *folderPath , SDL_Renderer *renderer)
+Animation load_image(const char *folderPath, SDL_Renderer *renderer)
 {
     Animation anim;
     anim.anim_frame = 0;
@@ -43,4 +42,10 @@ SDL_Texture *loadTexture(const char *file, SDL_Renderer *renderer)
     }
     SDL_FreeSurface(anim_surface);
     return texture;
+}
+
+// for showing the animation
+void show_animation(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
+{
+    SDL_RenderCopy(renderer, texture, NULL, rect);
 }

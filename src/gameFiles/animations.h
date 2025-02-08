@@ -3,7 +3,9 @@
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "gameEntities.h"
+
+// Animation State
+extern bool IDLE, RUNNING, DEAD, ON_GROUND;
 
 typedef struct
 {
@@ -12,12 +14,9 @@ typedef struct
     int anim_frame;
 } Animation;
 
-
-
 // functions declarations
 Animation load_image(const char *path, SDL_Renderer *renderer);
 SDL_Texture *loadTexture(const char *file, SDL_Renderer *renderer);
-
-
+void show_animation(SDL_Renderer *, SDL_Texture *, SDL_Rect *);
 
 #endif

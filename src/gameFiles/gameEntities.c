@@ -5,9 +5,10 @@ float PLAYER_VELOCITY_X = 3.0f;
 float PLAYER_VELOCITY_Y = 0;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
-const float TERMINAL_VELOCITY = 7.0f;
+const float TERMINAL_VELOCITY = 10.0f;
 float GRAVITY_PULL = 0.25f;
 bool isJumping;
+bool IDLE = true, RUNNING = false, DEAD = false, ON_GROUND = false;
 
 SDL_Rect *colliding_rect;
 // functions
@@ -18,10 +19,16 @@ float min(float a, float b)
 
 void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, bool isJumping)
 {
-    collision_flag[0] = false;
-    collision_flag[1] = false;
-    collision_flag[2] = false;
-    collision_flag[3] = false;
+    if (movement_x != 0)
+    {
+        IDLE = false;
+        RUNNING = true;
+    }
+    else
+    {
+        IDLE = true;
+        RUNNING = false;
+    }
     CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2)));
     if (collision & COLLISION_LEFT)
     {
@@ -35,11 +42,13 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
 
     if (collision & COLLISION_TOP)
     {
+        ON_GROUND = true;
         player_hitbox->y = colliding_rect->y - player_hitbox->h; // clamping player to the top of the platform
         PLAYER_VELOCITY_Y = 0;
     }
     if (isJumping)
     {
+        ON_GROUND = false;
         PLAYER_VELOCITY_Y = -5.0f;
     }
     if (collision & COLLISION_BOTTOM)
@@ -55,6 +64,20 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
 
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
 {
+    if (ON_GROUND)
+    {
+        if (RUNNING)
+        {
+            render_animation("running", renderer, rect);
+            SDL_SetRenderDrawColor(renderer, 225, 0, 0, 255);
+            SDL_RenderDrawRect(renderer, rect);
+        }
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 225, 255);
+        SDL_RenderDrawRect(renderer, rect);
+    }
     SDL_RenderCopy(renderer, texture, NULL, rect);
 }
 
@@ -108,4 +131,9 @@ CollisionSide collisionCheck(SDL_Rect *rect1, SDL_Rect *rect2)
     }
 
     return collision;
+}
+
+void render_animation(const char *animation, SDL_Renderer *renderer, SDL_Rect *rect)
+{
+    
 }

@@ -36,12 +36,6 @@ typedef enum
     COLLISION_RIGHT = 1 << 3
 } CollisionSide;
 
-typedef struct
-{
-    int x, y;
-    int w, h;
-} PhysicsEntity;
-
 float min(float, float);
 
 void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, bool isJumping);

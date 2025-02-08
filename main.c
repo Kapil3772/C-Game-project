@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     SDL_Rect collision_area2 = {100, 84, 76, 18};
 
     // Loading Screen or Game Menu
-    bool loading = 1;
+    bool loading = 0;
     bool running = 1;
     SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
     while (loading)

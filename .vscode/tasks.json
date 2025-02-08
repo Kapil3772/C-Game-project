@@ -11,7 +11,7 @@
                 "-o",
                 "build/game",
                 "main.c",
-                "src/gameFiles/gameEntities.c",       
+                "src/gameFiles/gameEntities.c",      
                 "-lmingw32",
                 "-lSDL2main",
                 "-lSDL2",
