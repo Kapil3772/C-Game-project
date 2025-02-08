@@ -1,4 +1,5 @@
 #include "gameEntities.h"
+#include "animations.h"
 #include <stdio.h>
 // variable definations
 float PLAYER_VELOCITY_X = 3.0f;
@@ -11,6 +12,7 @@ bool isJumping;
 bool IDLE = true, RUNNING = false, DEAD = false, ON_GROUND = false;
 
 SDL_Rect *colliding_rect;
+
 // functions
 float min(float a, float b)
 {
@@ -68,7 +70,6 @@ void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
     {
         if (RUNNING)
         {
-            render_animation("running", renderer, rect);
             SDL_SetRenderDrawColor(renderer, 225, 0, 0, 255);
             SDL_RenderDrawRect(renderer, rect);
         }

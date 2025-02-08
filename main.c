@@ -7,6 +7,7 @@
 
 // my includes
 #include "src/gameFiles/gameEntities.h"
+#include "src/gameFiles/animations.h"
 
 // Constants
 #define SCREEN_WIDTH 1020
@@ -57,7 +58,7 @@ int main(int argc, char **argv)
     }
 
     // load image into memory
-    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/Actor1_1.png");
+    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/test_player.png");
     if (!surface)
     {
         printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
@@ -117,6 +118,8 @@ int main(int argc, char **argv)
         printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
         return 1;
     }
+
+    Animation *player_run = load_animation("entities/player/run/", renderer, 16);
     // SDL_Texture *enemy_texture = load_image()
 
     // Wall entities rects
