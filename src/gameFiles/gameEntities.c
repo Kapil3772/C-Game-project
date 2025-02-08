@@ -2,14 +2,19 @@
 #include "animations.h"
 #include <stdio.h>
 // variable definations
-float PLAYER_VELOCITY_X = 2.5f;
+float PLAYER_VELOCITY_X = 2.8f;
 float PLAYER_VELOCITY_Y = 0;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
 const float TERMINAL_VELOCITY = 10.0f;
 float GRAVITY_PULL = 0.25f;
 bool isJumping;
-bool IDLE = true, RUNNING = false, DEAD = false, ON_GROUND = false;
+
+// charater state flags
+bool IDLE = true,
+     RUNNING = false,
+     DEAD = false,
+     ON_GROUND = false;
 
 SDL_Rect *colliding_rect;
 
@@ -21,7 +26,7 @@ float min(float a, float b)
 
 void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, bool isJumping)
 {
-    if (movement_x != 0)
+    if (movement_x != 0 && ON_GROUND)
     {
         IDLE = false;
         RUNNING = true;
@@ -32,6 +37,10 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
         RUNNING = false;
     }
     CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2)));
+    if (collision == NO_COLLISION)
+    {
+        ON_GROUND = false;
+    }
     if (collision & COLLISION_LEFT)
     {
         player_hitbox->x = colliding_rect->x - player_hitbox->w; // clamping player to the left of the platform
@@ -40,7 +49,7 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     {
         player_hitbox->x = colliding_rect->x + colliding_rect->w; // clamping player to the right of the platform
     }
-    player_hitbox->x = player_hitbox->x + movement_x * PLAYER_VELOCITY_X;
+    player_hitbox->x = player_hitbox->x + (movement_x * PLAYER_VELOCITY_X);
 
     if (collision & COLLISION_TOP)
     {
@@ -72,12 +81,17 @@ void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
         {
             render_animation(player_run, renderer, rect);
         }
+        else
+        {
+            // player idle
+            render_animation(player_idle, renderer, rect);
+            // render_animation(player_idle, renderer, rect);
+        }
     }
     else
     {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 225, 255);
-        SDL_RenderDrawRect(renderer, rect);
-        SDL_RenderCopy(renderer, texture, NULL, rect);
+        // player on air
+        render_animation(player_jump, renderer, rect);
     }
 }
 

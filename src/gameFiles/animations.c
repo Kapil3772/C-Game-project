@@ -57,6 +57,7 @@ Animation *load_animation(const char *folderPath, SDL_Renderer *renderer, int to
 }
 
 // for loading a single texture
+
 SDL_Texture *loadTexture(const char *filePath, SDL_Renderer *renderer)
 {
     SDL_Texture *texture = NULL;
@@ -87,7 +88,11 @@ void render_animation(Animation *anim, SDL_Renderer *renderer, SDL_Rect *rect)
     int frames = anim->anim_frame;
     int duration = anim->anim_duration;
     int current_frame = (SDL_GetTicks() / duration) % frames;
-    if (SDL_RenderCopy(renderer, anim->textureArr[current_frame], NULL, rect) != 0)
+    if (player_facing == RIGHT && SDL_RenderCopy(renderer, anim->textureArr[current_frame], NULL, rect) != 0)
+    {
+        printf("Error: Failed to render texture for frame %d\n", current_frame);
+    }
+    else if (player_facing == LEFT && SDL_RenderCopyEx(renderer, anim->textureArr[current_frame], NULL, rect, 0, NULL, SDL_FLIP_HORIZONTAL) != 0)
     {
         printf("Error: Failed to render texture for frame %d\n", current_frame);
     }

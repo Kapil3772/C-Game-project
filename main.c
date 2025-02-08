@@ -18,7 +18,10 @@
 // Animation pointers
 Animation *player_run = NULL,
           *player_idle = NULL,
-          *player_hit = NULL;
+          *player_hit = NULL,
+          *player_jump = NULL;
+// charaters facing direction flag
+FacingDirection player_facing; // initially player will face left
 
 SDL_Renderer *renderer = NULL;
 
@@ -77,6 +80,8 @@ int main(int argc, char **argv)
 
     // Preloading animations
     player_run = load_animation("entities/player/run/", renderer, 16);
+    player_idle = load_animation("entities/player/idle/", renderer, 10);
+    player_jump = load_animation("entities/player/jump/", renderer, 1);
 
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -88,7 +93,7 @@ int main(int argc, char **argv)
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
     // Collision detection rects
-    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 100, 40};
+    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 300, 40};
     SDL_Rect collision_area2 = {100, 84, 76, 18};
 
     // Loading Screen or Game Menu
@@ -187,12 +192,14 @@ int main(int argc, char **argv)
                 break;
                 case SDLK_LEFT:
                 {
+                    player_facing = LEFT;
                     // printf("Left arrow key pressed\n");
                     movement[0] = true;
                 }
                 break;
                 case SDLK_RIGHT:
                 {
+                    player_facing = RIGHT;
                     // printf("Right arrow key pressed\n");
                     movement[1] = true;
                 }
