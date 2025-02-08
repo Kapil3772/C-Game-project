@@ -10,10 +10,22 @@
 #include "src/gameFiles/animations.h"
 
 // Constants
-#define SCREEN_WIDTH 1020
+#define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 720
 #define TARGET_FPS 60
 #define FRAME_DELAY (1000 / TARGET_FPS) // 16.67ms per frame
+
+// Animation pointers
+Animation *player_run = NULL,
+          *player_idle = NULL,
+          *player_hit = NULL;
+
+SDL_Renderer *renderer = NULL;
+
+SDL_Texture *player_texture = NULL,
+            *loadingScreen = NULL,
+            *gameBackground = NULL,
+            *collision_area_texture = NULL;
 
 int main(int argc, char **argv)
 {
@@ -32,7 +44,7 @@ int main(int argc, char **argv)
     }
     // Create a window
     SDL_Window *window = SDL_CreateWindow(
-        "Game",                 // Window title
+        "Ninja-game-C",         // Window title
         SDL_WINDOWPOS_CENTERED, // X position
         SDL_WINDOWPOS_CENTERED, // Y position
         SCREEN_WIDTH,           // Width
@@ -47,7 +59,7 @@ int main(int argc, char **argv)
     }
 
     // Create a renderer for the window
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer)
     {
         printf("Error: Failed to create renderer\nSDL_Error: '%s'\n", SDL_GetError());
@@ -57,70 +69,14 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // load image into memory
-    SDL_Surface *surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/test_player.png");
-    if (!surface)
-    {
-        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
+    // Preloading textures
+    player_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/test_player.png", renderer);
+    loadingScreen = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png", renderer);
+    gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/gameBackground.png", renderer);
+    collision_area_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/collision_area.png", renderer);
 
-    // load image into graphics hardware
-    SDL_Texture *player_texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    if (!player_texture)
-    {
-        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Surface *loadingScreen_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png");
-    if (!loadingScreen_surface)
-    {
-        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Texture *loadingScreen = SDL_CreateTextureFromSurface(renderer, loadingScreen_surface);
-    SDL_FreeSurface(loadingScreen_surface);
-    if (!loadingScreen)
-    {
-        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Surface *gameBackground_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/gameBackground.png");
-    if (!gameBackground_surface)
-    {
-        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Texture *gameBackground = SDL_CreateTextureFromSurface(renderer, gameBackground_surface);
-    SDL_FreeSurface(gameBackground_surface);
-    if (!gameBackground)
-    {
-        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Surface *collision_area_surface = IMG_Load("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/collision_area.png");
-    if (!collision_area_surface)
-    {
-        printf("Error: Failed to load image\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Texture *collision_area_texture = SDL_CreateTextureFromSurface(renderer, collision_area_surface);
-    SDL_FreeSurface(collision_area_surface);
-    if (!collision_area_texture)
-    {
-        printf("Error: Failed to create texture\nSDL_Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    Animation *player_run = load_animation("entities/player/run/", renderer, 16);
-    // SDL_Texture *enemy_texture = load_image()
+    // Preloading animations
+    player_run = load_animation("entities/player/run/", renderer, 16);
 
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};

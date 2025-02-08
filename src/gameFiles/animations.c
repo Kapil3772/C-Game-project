@@ -60,6 +60,7 @@ Animation *load_animation(const char *folderPath, SDL_Renderer *renderer, int to
 SDL_Texture *loadTexture(const char *filePath, SDL_Renderer *renderer)
 {
     SDL_Texture *texture = NULL;
+    // load image into memory
     SDL_Surface *anim_surface = IMG_Load(filePath);
     if (!anim_surface)
     {
@@ -68,6 +69,7 @@ SDL_Texture *loadTexture(const char *filePath, SDL_Renderer *renderer)
     }
     else
     {
+        // load image into graphics hardware
         texture = SDL_CreateTextureFromSurface(renderer, anim_surface);
         if (!texture)
         {
@@ -79,10 +81,16 @@ SDL_Texture *loadTexture(const char *filePath, SDL_Renderer *renderer)
     return texture;
 }
 
-// for showing the animation
-void show_animation(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
+// rendering animation by name
+void render_animation(Animation *anim, SDL_Renderer *renderer, SDL_Rect *rect)
 {
-    SDL_RenderCopy(renderer, texture, NULL, rect);
+    int frames = anim->anim_frame;
+    int duration = anim->anim_duration;
+    int current_frame = (SDL_GetTicks() / duration) % frames;
+    if (SDL_RenderCopy(renderer, anim->textureArr[current_frame], NULL, rect) != 0)
+    {
+        printf("Error: Failed to render texture for frame %d\n", current_frame);
+    }
 }
 
 // cleanup function for animation
@@ -104,4 +112,3 @@ void free_animation(Animation *anim)
         free(anim);
     }
 }
-

@@ -17,6 +17,11 @@ typedef struct
 // functions declarations
 Animation *load_animation(const char *path, SDL_Renderer *renderer, int total_frames);
 SDL_Texture *loadTexture(const char *file, SDL_Renderer *renderer);
+
+void render_animation(Animation *anim, SDL_Renderer *renderer, SDL_Rect *rect);
 void free_animation(Animation* anim);
+
+void initializeAnimations();
+extern Animation *player_run, *player_idle, *player_hit;
 
 #endif

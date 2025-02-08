@@ -2,7 +2,7 @@
 #include "animations.h"
 #include <stdio.h>
 // variable definations
-float PLAYER_VELOCITY_X = 3.0f;
+float PLAYER_VELOCITY_X = 2.5f;
 float PLAYER_VELOCITY_Y = 0;
 bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
@@ -70,16 +70,15 @@ void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)
     {
         if (RUNNING)
         {
-            SDL_SetRenderDrawColor(renderer, 225, 0, 0, 255);
-            SDL_RenderDrawRect(renderer, rect);
+            render_animation(player_run, renderer, rect);
         }
     }
     else
     {
         SDL_SetRenderDrawColor(renderer, 0, 0, 225, 255);
         SDL_RenderDrawRect(renderer, rect);
+        SDL_RenderCopy(renderer, texture, NULL, rect);
     }
-    SDL_RenderCopy(renderer, texture, NULL, rect);
 }
 
 CollisionSide collisionCheck(SDL_Rect *rect1, SDL_Rect *rect2)
@@ -132,9 +131,4 @@ CollisionSide collisionCheck(SDL_Rect *rect1, SDL_Rect *rect2)
     }
 
     return collision;
-}
-
-void render_animation(const char *animation, SDL_Renderer *renderer, SDL_Rect *rect)
-{
-    
 }
