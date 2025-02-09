@@ -7,8 +7,8 @@
 // Game fundamentals Constants
 #define PLAYER_POS_X 0
 #define PLAYER_POS_Y 0
-#define PLAYER_WIDTH 32
-#define PLAYER_HEIGHT 32
+#define PLAYER_WIDTH 44
+#define PLAYER_HEIGHT 44
 #define GRAVITY 0.00
 #define WALL_THICKNESS 150
 

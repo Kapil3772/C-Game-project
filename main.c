@@ -10,8 +10,8 @@
 #include "src/gameFiles/animations.h"
 
 // Constants
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH 1020
+#define SCREEN_HEIGHT 638
 #define TARGET_FPS 60
 #define FRAME_DELAY (1000 / TARGET_FPS) // 16.67ms per frame
 
@@ -21,7 +21,7 @@ Animation *player_run = NULL,
           *player_hit = NULL,
           *player_jump = NULL;
 // charaters facing direction flag
-FacingDirection player_facing; // initially player will face left
+FacingDirection player_facing = RIGHT; // initially player will face left
 
 SDL_Renderer *renderer = NULL;
 
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     // Preloading textures
     player_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/test_player.png", renderer);
     loadingScreen = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png", renderer);
-    gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/gameBackground.png", renderer);
+    gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/dark_oakwood.png", renderer);
     collision_area_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/collision_area.png", renderer);
 
     // Preloading animations
