@@ -26,7 +26,7 @@ float min(float a, float b)
     return (a < b) ? a : b;
 }
 
-void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, bool isJumping)
+void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, SDL_Rect *collision_area5, SDL_Rect *collision_area6, bool isJumping)
 {
     if (movement_x != 0 && ON_GROUND)
     {
@@ -38,7 +38,7 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
         IDLE = true;
         RUNNING = false;
     }
-    CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2) | collisionCheck(player_hitbox, collision_area3) | collisionCheck(player_hitbox, collision_area4)));
+    CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2) | collisionCheck(player_hitbox, collision_area3) | collisionCheck(player_hitbox, collision_area4) | collisionCheck(player_hitbox, collision_area5) | collisionCheck(player_hitbox, collision_area6)));
     if (collision == NO_COLLISION)
     {
         ON_GROUND = false;

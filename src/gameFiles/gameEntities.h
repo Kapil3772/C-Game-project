@@ -21,7 +21,7 @@ extern const float TERMINAL_VELOCITY;
 // Renderer pointers
 extern SDL_Renderer *renderer;
 extern SDL_Rect *colliding_rect;
-extern SDL_Texture *player_texture, *loadingScreen, *gameBackground, *collision_area_texture;
+extern SDL_Texture *player_texture, *loadingScreen, *gameBackground, *bg_parallax, *collision_area_texture;
 
 extern int player_movement[2];
 
@@ -58,7 +58,7 @@ CollisionSide collisionCheck(SDL_Rect *, SDL_Rect *);
 float min(float, float);
 
 // Functions to update and render player
-void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, bool isJumping);
+void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, SDL_Rect *collision_area5, SDL_Rect *collision_area6, bool isJumping);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 #endif

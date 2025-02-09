@@ -28,7 +28,8 @@ SDL_Renderer *renderer = NULL;
 SDL_Texture *player_texture = NULL,
             *loadingScreen = NULL,
             *gameBackground = NULL,
-            *collision_area_texture = NULL;
+            *collision_area_texture = NULL,
+            *bg_parallax = NULL;
 
 int main(int argc, char **argv)
 {
@@ -75,6 +76,7 @@ int main(int argc, char **argv)
     // Preloading textures
     loadingScreen = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png", renderer);
     gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/dark_oakwood.png", renderer);
+    bg_parallax = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/bg_parallaxLayer.png", renderer);
 
     // Preloading animations
     player_run = load_animation("entities/player/run/", renderer, 16);
@@ -83,6 +85,7 @@ int main(int argc, char **argv)
 
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_Rect parallax_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_Rect rightWindow_wall = {SCREEN_WIDTH - 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
     SDL_Rect bottomWindow_wall = {0, SCREEN_HEIGHT - 5, SCREEN_WIDTH, WALL_THICKNESS};
     SDL_Rect leftWindow_wall = {-WALL_THICKNESS + 5, 0, WALL_THICKNESS, SCREEN_HEIGHT};
@@ -95,6 +98,8 @@ int main(int argc, char **argv)
     SDL_Rect collision_area = {200, 569, 208, 69};
     SDL_Rect collision_area2 = {0, 397, 284, 21};
     SDL_Rect collision_area4 = {571, 563, 449, 75};
+    SDL_Rect collision_area5 = {385, 430, 75, 13};
+    SDL_Rect collision_area6 = {-37, 265, 75, 13};
 
     // Loading Screen or Game Menu
     bool loading = 0;
@@ -162,7 +167,7 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         // Update Player position
-        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, &collision_area2, &collision_area3, &collision_area4, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, &collision_area2, &collision_area3, &collision_area4, &collision_area5, &collision_area6, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
         isJumping = false;
 
         SDL_Event event;
@@ -253,20 +258,23 @@ int main(int argc, char **argv)
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
         SDL_RenderFillRect(renderer, &topWindow_wall);
-        if (collisionCheck(&player_hitbox, &collision_area))
-        {
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        }
-        else
-        {
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        }
-        SDL_RenderDrawRect(renderer, &collision_area);
-        SDL_RenderDrawRect(renderer, &collision_area2);
-        SDL_RenderDrawRect(renderer, &collision_area3);
-        SDL_RenderDrawRect(renderer, &collision_area4);
+        // if (collisionCheck(&player_hitbox, &collision_area))
+        // {
+        //     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        // }
+        // else
+        // {
+        //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        // }
+        // SDL_RenderDrawRect(renderer, &collision_area);
+        // SDL_RenderDrawRect(renderer, &collision_area2);
+        // SDL_RenderDrawRect(renderer, &collision_area3);
+        // SDL_RenderDrawRect(renderer, &collision_area4);
+        // SDL_RenderDrawRect(renderer, &collision_area5);
+        // SDL_RenderDrawRect(renderer, &collision_area6);
         renderPlayer(renderer, player_texture, &player_hitbox);
 
+        SDL_RenderCopy(renderer, bg_parallax, NULL, &parallax_rect);
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control
