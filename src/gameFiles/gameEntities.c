@@ -8,6 +8,7 @@ bool fps_flag = false;
 bool collision_flag[4] = {false, false, false, false};
 const float TERMINAL_VELOCITY = 10.0f;
 float GRAVITY_PULL = 0.25f;
+float movement_increaser = 0; // temporary fix to the bug : player not moving fast when facing right
 bool isJumping;
 
 // charater state flags
@@ -16,6 +17,7 @@ bool IDLE = true,
      DEAD = false,
      ON_GROUND = false;
 
+colliding_object colliding_obj_1 = {NULL, NO_COLLISION}, colliding_obj_2 = {NULL, NO_COLLISION};
 SDL_Rect *colliding_rect;
 
 // functions
@@ -24,7 +26,7 @@ float min(float a, float b)
     return (a < b) ? a : b;
 }
 
-void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, bool isJumping)
+void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, bool isJumping)
 {
     if (movement_x != 0 && ON_GROUND)
     {
@@ -36,7 +38,7 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
         IDLE = true;
         RUNNING = false;
     }
-    CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2)));
+    CollisionSide collision = (CollisionSide)((collisionCheck(player_hitbox, collision_area) | collisionCheck(player_hitbox, collision_area2) | collisionCheck(player_hitbox, collision_area3) | collisionCheck(player_hitbox, collision_area4)));
     if (collision == NO_COLLISION)
     {
         ON_GROUND = false;
@@ -49,7 +51,15 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     {
         player_hitbox->x = colliding_rect->x + colliding_rect->w; // clamping player to the right of the platform
     }
-    player_hitbox->x = player_hitbox->x + (movement_x * PLAYER_VELOCITY_X);
+    if (player_facing == RIGHT && movement_x != 0)
+    {
+        movement_increaser = 0.8f;
+    }
+    else
+    {
+        movement_increaser = 0;
+    }
+    player_hitbox->x = player_hitbox->x + (movement_x * PLAYER_VELOCITY_X) + movement_increaser;
 
     if (collision & COLLISION_TOP)
     {
@@ -60,7 +70,7 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     if (isJumping)
     {
         ON_GROUND = false;
-        PLAYER_VELOCITY_Y = -5.0f;
+        PLAYER_VELOCITY_Y = -6.0f;
     }
     if (collision & COLLISION_BOTTOM)
     {

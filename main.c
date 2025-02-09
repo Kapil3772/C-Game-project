@@ -73,10 +73,8 @@ int main(int argc, char **argv)
     }
 
     // Preloading textures
-    player_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/entities/test_player.png", renderer);
     loadingScreen = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png", renderer);
     gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/dark_oakwood.png", renderer);
-    collision_area_texture = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/collision_area.png", renderer);
 
     // Preloading animations
     player_run = load_animation("entities/player/run/", renderer, 16);
@@ -93,8 +91,10 @@ int main(int argc, char **argv)
     SDL_Rect player_hitbox = {PLAYER_POS_X, PLAYER_POS_Y, PLAYER_WIDTH, PLAYER_HEIGHT};
 
     // Collision detection rects
-    SDL_Rect collision_area = {SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 300, 40};
-    SDL_Rect collision_area2 = {100, 84, 76, 18};
+    SDL_Rect collision_area3 = {226, 170, 284, 16};
+    SDL_Rect collision_area = {200, 569, 208, 69};
+    SDL_Rect collision_area2 = {0, 397, 284, 21};
+    SDL_Rect collision_area4 = {571, 563, 449, 75};
 
     // Loading Screen or Game Menu
     bool loading = 0;
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
         SDL_RenderClear(renderer);
 
         // Update Player position
-        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, &collision_area2, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
+        updatePlayer(&player_hitbox, movement[1] - movement[0], 0, &collision_area, &collision_area2, &collision_area3, &collision_area4, isJumping); // pasing y = 0 because this is a platformer, if rpg y pani pathauthyo
         isJumping = false;
 
         SDL_Event event;
@@ -262,7 +262,9 @@ int main(int argc, char **argv)
             SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         }
         SDL_RenderDrawRect(renderer, &collision_area);
-        SDL_RenderCopy(renderer, collision_area_texture, NULL, &collision_area2);
+        SDL_RenderDrawRect(renderer, &collision_area2);
+        SDL_RenderDrawRect(renderer, &collision_area3);
+        SDL_RenderDrawRect(renderer, &collision_area4);
         renderPlayer(renderer, player_texture, &player_hitbox);
 
         SDL_RenderPresent(renderer);

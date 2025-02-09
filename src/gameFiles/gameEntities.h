@@ -33,6 +33,7 @@ extern bool isJumping;
 extern float GRAVITY_PULL;
 extern float PLAYER_VELOCITY_X;
 extern float PLAYER_VELOCITY_Y;
+extern float movement_increaser; // temporary fix to the bug : player not moving fast when facing right
 
 extern SDL_Texture tex[];
 typedef enum
@@ -44,6 +45,12 @@ typedef enum
     COLLISION_RIGHT = 1 << 3
 } CollisionSide;
 
+typedef struct {
+    SDL_Rect *rect;
+    CollisionSide collision;
+} colliding_object;
+
+
 // Function to check collision between two SDL_Rects
 CollisionSide collisionCheck(SDL_Rect *, SDL_Rect *);
 
@@ -51,7 +58,7 @@ CollisionSide collisionCheck(SDL_Rect *, SDL_Rect *);
 float min(float, float);
 
 // Functions to update and render player
-void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, bool isJumping);
+void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, bool isJumping);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
 
 #endif
