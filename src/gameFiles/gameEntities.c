@@ -156,3 +156,18 @@ CollisionSide collisionCheck(SDL_Rect *rect1, SDL_Rect *rect2)
 
     return collision;
 }
+
+
+void cleanUp(void)
+{
+    free_animation(player_run);
+    free_animation(player_idle);
+    free_animation(player_jump);
+    SDL_DestroyTexture(gameBackground);
+    SDL_DestroyTexture(bg_parallax);
+    SDL_DestroyTexture(loadingScreen);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+}

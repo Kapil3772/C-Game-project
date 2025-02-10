@@ -23,6 +23,7 @@ Animation *player_run = NULL,
 // charaters facing direction flag
 FacingDirection player_facing = RIGHT; // initially player will face left
 
+SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
 SDL_Texture *player_texture = NULL,
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
         return 1;
     }
     // Create a window
-    SDL_Window *window = SDL_CreateWindow(
+    window = SDL_CreateWindow(
         "Ninja-game-C",         // Window title
         SDL_WINDOWPOS_CENTERED, // X position
         SDL_WINDOWPOS_CENTERED, // Y position
@@ -302,14 +303,6 @@ int main(int argc, char **argv)
     }
 
     // Clean up
-
-    SDL_DestroyTexture(gameBackground);
-    SDL_DestroyTexture(bg_parallax);
-    SDL_DestroyTexture(loadingScreen);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyTexture(player_texture);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
+    cleanUp();
     return 0;
 }
