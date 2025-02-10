@@ -32,6 +32,7 @@ extern int player_movement[2];
 extern bool collision_flag[4];
 extern bool movement[2];
 extern bool isJumping;
+extern int player_jumps;
 
 extern float GRAVITY_PULL;
 extern float PLAYER_VELOCITY_X;

@@ -10,6 +10,7 @@ const float TERMINAL_VELOCITY = 10.0f;
 float GRAVITY_PULL = 0.25f;
 float movement_increaser = 0; // temporary fix to the bug : player not moving fast when facing right
 bool isJumping;
+int player_jumps = 2;
 
 // charater state flags
 bool IDLE = true,
@@ -64,13 +65,15 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     if (collision & COLLISION_TOP)
     {
         ON_GROUND = true;
+        player_jumps = 2;
         player_hitbox->y = colliding_rect->y - player_hitbox->h; // clamping player to the top of the platform
         PLAYER_VELOCITY_Y = 0;
     }
     if (isJumping)
     {
         ON_GROUND = false;
-        PLAYER_VELOCITY_Y = -6.0f;
+        player_jumps--;
+        if (player_jumps >= 0) PLAYER_VELOCITY_Y = -6.0f;
     }
     if (collision & COLLISION_BOTTOM)
     {
