@@ -4,10 +4,12 @@
 #include "src/include/SDL2/SDL.h"
 #include "src/include/SDL2/SDL_timer.h"
 #include "src/include/SDL2/SDL_image.h"
+#include "src/include/SDL2/SDL_mixer.h"
 
 // my includes
 #include "src/gameFiles/gameEntities.h"
 #include "src/gameFiles/animations.h"
+#include "src/gameFiles/audios.h"
 
 // Constants
 #define SCREEN_WIDTH 1020
@@ -32,6 +34,9 @@ SDL_Texture *player_texture = NULL,
             *collision_area_texture = NULL,
             *bg_parallax = NULL;
 
+Mix_Music *bg_music = NULL;
+Mix_Chunk *jump = NULL;
+
 int main(int argc, char **argv)
 {
 
@@ -50,6 +55,10 @@ int main(int argc, char **argv)
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
         printf("Error: SDL failed to initialize Audio subsystem\nSDL Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
         return 1;
     }
     // Create a window
@@ -88,6 +97,14 @@ int main(int argc, char **argv)
     player_run = load_animation("entities/player/run/", renderer, 16);
     player_idle = load_animation("entities/player/idle/", renderer, 10);
     player_jump = load_animation("entities/player/jump/", renderer, 1);
+
+    // Preloading audios
+    bg_music = loadMusic("game_background");
+    if (Mix_PlayMusic(bg_music, -1) == -1) {
+        printf("Failed to play music! SDL_Mixer Error: %s\n", Mix_GetError());
+        return -1;
+    }
+    jump = loadSfx("jump");
 
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};

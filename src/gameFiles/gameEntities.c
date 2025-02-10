@@ -160,14 +160,13 @@ CollisionSide collisionCheck(SDL_Rect *rect1, SDL_Rect *rect2)
 
 void cleanUp(void)
 {
-    free_animation(player_run);
-    free_animation(player_idle);
-    free_animation(player_jump);
-    SDL_DestroyTexture(gameBackground);
-    SDL_DestroyTexture(bg_parallax);
-    SDL_DestroyTexture(loadingScreen);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    if (player_run) free_animation(player_run);
+    if (player_idle) free_animation(player_idle);
+    if (player_jump) free_animation(player_jump);
+    if (gameBackground) SDL_DestroyTexture(gameBackground);
+    if (bg_parallax) SDL_DestroyTexture(bg_parallax);
+    if (loadingScreen) SDL_DestroyTexture(loadingScreen);
+    if (renderer) SDL_DestroyRenderer(renderer);
+    if (window) SDL_DestroyWindow(window);
     SDL_Quit();
-
 }
