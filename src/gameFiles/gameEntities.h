@@ -5,8 +5,8 @@
 #include "SDL2/SDL.h"
 
 // Game fundamentals Constants
-#define PLAYER_POS_X 0
-#define PLAYER_POS_Y 0
+#define PLAYER_POS_X 171
+#define PLAYER_POS_Y 250
 #define PLAYER_WIDTH 44
 #define PLAYER_HEIGHT 44
 #define GRAVITY 0.00

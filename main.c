@@ -104,7 +104,7 @@ int main(int argc, char **argv)
         printf("Failed to play music! SDL_Mixer Error: %s\n", Mix_GetError());
         return -1;
     }
-    jump = loadSfx("jump");
+    //jump = loadSfx("jump");
 
     // Wall entities rects
     SDL_Rect window_rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};

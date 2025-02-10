@@ -9,6 +9,7 @@
 #include "utils.h"
 
 Mix_Music * loadMusic(const char *path);
+Mix_Chunk * loadSfx(const char *path);
 extern Mix_Music *bg_music;
 extern Mix_Chunk *jump;
 void cleanUpAudio(void);
