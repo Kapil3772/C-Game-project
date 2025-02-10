@@ -32,10 +32,13 @@ SDL_Texture *player_texture = NULL,
             *loadingScreen = NULL,
             *gameBackground = NULL,
             *collision_area_texture = NULL,
-            *bg_parallax = NULL;
+            *bg_parallax = NULL,
+            *loadingScreen_parallax = NULL;
 
 Mix_Music *bg_music = NULL;
 Mix_Chunk *jump = NULL;
+
+bool rb_mode = 0;
 
 int main(int argc, char **argv)
 {
@@ -57,7 +60,8 @@ int main(int argc, char **argv)
         printf("Error: SDL failed to initialize Audio subsystem\nSDL Error: '%s'\n", SDL_GetError());
         return 1;
     }
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+    {
         printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
         return 1;
     }
@@ -90,6 +94,7 @@ int main(int argc, char **argv)
 
     // Preloading textures
     loadingScreen = loadTexture("data/images/loadingScreen.png", renderer);
+    loadingScreen_parallax = loadTexture("data/images/loadingScreen_parallax.png", renderer);
     gameBackground = loadTexture("data/images/backgrounds/dark_oakwood.png", renderer);
     bg_parallax = loadTexture("data/images/backgrounds/bg_parallaxLayer.png", renderer);
 
@@ -100,11 +105,12 @@ int main(int argc, char **argv)
 
     // Preloading audios
     bg_music = loadMusic("game_background");
-    if (Mix_PlayMusic(bg_music, -1) == -1) {
+    if (Mix_PlayMusic(bg_music, -1) == -1)
+    {
         printf("Failed to play music! SDL_Mixer Error: %s\n", Mix_GetError());
         return -1;
     }
-    Mix_VolumeMusic(MIX_MAX_VOLUME);  // Max = 128
+    Mix_VolumeMusic(MIX_MAX_VOLUME); // Max = 128
     jump = loadSfx("jump");
 
     // Wall entities rects
@@ -126,11 +132,20 @@ int main(int argc, char **argv)
     SDL_Rect collision_area6 = {-37, 265, 75, 13};
 
     // Loading Screen or Game Menu
-    bool loading = 0;
+    bool loading = 1;
     bool running = 1;
-    SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     while (loading)
     {
+        SDL_RenderClear(renderer);
+        if (rb_mode)
+        {
+            SDL_RenderCopy(renderer, loadingScreen_parallax, NULL, &window_rect);
+        }
+        else
+        {
+            SDL_RenderCopy(renderer, loadingScreen, NULL, &window_rect);
+        }
         SDL_RenderPresent(renderer);
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -147,6 +162,11 @@ int main(int argc, char **argv)
                 case SDLK_e:
                 {
                     loading = 0;
+                }
+                break;
+                case SDLK_r:
+                {
+                    rb_mode = !rb_mode;
                 }
                 break;
                 default:
@@ -277,11 +297,7 @@ int main(int argc, char **argv)
 
         // Rendering
         SDL_RenderCopy(renderer, gameBackground, NULL, &window_rect);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &leftWindow_wall);
-        SDL_RenderFillRect(renderer, &bottomWindow_wall);
-        SDL_RenderFillRect(renderer, &rightWindow_wall);
-        SDL_RenderFillRect(renderer, &topWindow_wall);
+        
         // if (collisionCheck(&player_hitbox, &collision_area))
         // {
         //     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -299,6 +315,12 @@ int main(int argc, char **argv)
         renderPlayer(renderer, player_texture, &player_hitbox);
 
         SDL_RenderCopy(renderer, bg_parallax, NULL, &parallax_rect);
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &leftWindow_wall);
+        SDL_RenderFillRect(renderer, &bottomWindow_wall);
+        SDL_RenderFillRect(renderer, &rightWindow_wall);
+        SDL_RenderFillRect(renderer, &topWindow_wall);
         SDL_RenderPresent(renderer);
 
         // Fixed Frame rate control

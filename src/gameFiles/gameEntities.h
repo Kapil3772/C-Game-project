@@ -15,6 +15,7 @@
 // Game fundamentals Flags
 extern bool fps_flag;
 extern bool running, loading;
+extern bool rb_mode;
 
 extern const float TERMINAL_VELOCITY;
 
@@ -24,7 +25,7 @@ extern SDL_Window *window;
 // Renderer pointers
 extern SDL_Renderer *renderer;
 extern SDL_Rect *colliding_rect;
-extern SDL_Texture *loadingScreen, *gameBackground, *bg_parallax, *collision_area_texture;
+extern SDL_Texture *loadingScreen, *gameBackground, *bg_parallax, *loadingScreen_parallax;
 
 extern int player_movement[2];
 
