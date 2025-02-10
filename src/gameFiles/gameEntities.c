@@ -1,5 +1,6 @@
 #include "gameEntities.h"
 #include "animations.h"
+#include "audios.h"
 #include <stdio.h>
 // variable definations
 float PLAYER_VELOCITY_X = 2.8f;
@@ -22,7 +23,7 @@ colliding_object colliding_obj_1 = {NULL, NO_COLLISION}, colliding_obj_2 = {NULL
 SDL_Rect *colliding_rect;
 
 // functions
-float min(float a, float b)
+float game_min(float a, float b)
 {
     return (a < b) ? a : b;
 }
@@ -73,7 +74,11 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
     {
         ON_GROUND = false;
         player_jumps--;
-        if (player_jumps >= 0) PLAYER_VELOCITY_Y = -6.0f;
+        if (player_jumps >= 0)
+        {
+            playSfx(jump, -1, 0);
+            PLAYER_VELOCITY_Y = -6.0f;  // for only jumping twice in a row
+        }
     }
     if (collision & COLLISION_BOTTOM)
     {
@@ -83,7 +88,7 @@ void updatePlayer(SDL_Rect *player_hitbox, int movement_x, int movement_y, SDL_R
 
     player_hitbox->y = player_hitbox->y + movement_y + PLAYER_VELOCITY_Y;
 
-    PLAYER_VELOCITY_Y = min(TERMINAL_VELOCITY, PLAYER_VELOCITY_Y + GRAVITY_PULL);
+    PLAYER_VELOCITY_Y = game_min(TERMINAL_VELOCITY, PLAYER_VELOCITY_Y + GRAVITY_PULL);
 }
 
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect)

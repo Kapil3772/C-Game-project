@@ -59,7 +59,7 @@ typedef struct {
 CollisionSide collisionCheck(SDL_Rect *, SDL_Rect *);
 
 // Maths Functions
-float min(float, float);
+float game_min(float, float);
 
 // Functions to update and render player
 void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, SDL_Rect *collision_area5, SDL_Rect *collision_area6, bool isJumping);

@@ -10,6 +10,7 @@
 
 Mix_Music * loadMusic(const char *path);
 Mix_Chunk * loadSfx(const char *path);
+void playSfx(Mix_Chunk *sfx, int channel, int loops);
 extern Mix_Music *bg_music;
 extern Mix_Chunk *jump;
 void cleanUpAudio(void);

@@ -26,6 +26,12 @@ Mix_Chunk *loadSfx(const char *path)
     return sfx;
 }
 
+void playSfx(Mix_Chunk *sfx, int channel, int loops)
+{
+    int channel1 = Mix_PlayChannel(channel, sfx, loops);
+    Mix_Volume(channel1, 64);
+}
+
 void cleanUpAudio(void)
 {
     Mix_FreeMusic(bg_music);
