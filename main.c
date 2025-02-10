@@ -37,13 +37,18 @@ int main(int argc, char **argv)
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
     {
-        printf("Error: SDL failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
+        printf("Error: SDL failed to initialize video and timer subsystems\nSDL Error: '%s'\n", SDL_GetError());
         return 1;
     }
     // Initialize SDL_image for png support
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
     {
         printf("Error: SDL_image failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
+        return 1;
+    }
+    if (SDL_Init(SDL_INIT_AUDIO) < 0)
+    {
+        printf("Error: SDL failed to initialize Audio subsystem\nSDL Error: '%s'\n", SDL_GetError());
         return 1;
     }
     // Create a window
@@ -74,9 +79,9 @@ int main(int argc, char **argv)
     }
 
     // Preloading textures
-    loadingScreen = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/loadingScreen.png", renderer);
-    gameBackground = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/dark_oakwood.png", renderer);
-    bg_parallax = loadTexture("C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/backgrounds/bg_parallaxLayer.png", renderer);
+    loadingScreen = loadTexture("data/images/loadingScreen.png", renderer);
+    gameBackground = loadTexture("data/images/backgrounds/dark_oakwood.png", renderer);
+    bg_parallax = loadTexture("data/images/backgrounds/bg_parallaxLayer.png", renderer);
 
     // Preloading animations
     player_run = load_animation("entities/player/run/", renderer, 16);
@@ -253,7 +258,7 @@ int main(int argc, char **argv)
 
         // Rendering
         SDL_RenderCopy(renderer, gameBackground, NULL, &window_rect);
-        SDL_SetRenderDrawColor(renderer, 199, 128, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &leftWindow_wall);
         SDL_RenderFillRect(renderer, &bottomWindow_wall);
         SDL_RenderFillRect(renderer, &rightWindow_wall);
@@ -297,6 +302,10 @@ int main(int argc, char **argv)
     }
 
     // Clean up
+
+    SDL_DestroyTexture(gameBackground);
+    SDL_DestroyTexture(bg_parallax);
+    SDL_DestroyTexture(loadingScreen);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyTexture(player_texture);
     SDL_DestroyWindow(window);

@@ -1,5 +1,5 @@
 
-char BASE_IMG_PATH[] = "C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/images/";
+char BASE_IMG_PATH[] = "data/images/";
 
-char BASE_AUDIO_PATH[] = "C:/Users/Lenovo/Desktop/C-game-pro/C-Game-project/data/audios/";
+char BASE_AUDIO_PATH[] = "data/audios/";
 
