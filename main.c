@@ -93,9 +93,9 @@ int main(int argc, char **argv)
     }
 
     // Preloading textures
-    loadingScreen = loadTexture("data/images/loadingScreen.png", renderer);
+    loadingScreen = loadTexture("data/images/backgrounds/loadingScreen.png", renderer);
     // 
-    loadingScreen_parallax = loadTexture("data/images/loadingScreen_parallax.png", renderer);
+    loadingScreen_parallax = loadTexture("data/images/backgrounds/loadingScreen_parallax.png", renderer);
     gameBackground = loadTexture("data/images/backgrounds/dark_oakwood.png", renderer);
     bg_parallax = loadTexture("data/images/backgrounds/bg_parallaxLayer.png", renderer);
 
