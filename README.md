@@ -2,6 +2,14 @@
 
 A visually appealing and interactive platformer game built with SDL2 for a C class project.
 
+## Screenshots
+
+![Loading Screen](data/screenshots/loading_screen.png)
+*Loading screen*
+
+![Game Screen](data/screenshots/game_screen.png)
+*Game screen*
+
 ## Features
 
 - **Colorful and Animated Characters**: Vibrant colors and smooth animations
@@ -39,7 +47,7 @@ g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c sr
 ./build/game.exe
 ```
 ### OR 
-you could run the task.json file to compile and run using few .\ key bindings <br> **so that you dont have to manually type the above command every time you make an update**
+you could run the task.json file to compile and run using few key bindings <br> **so that you dont have to manually type the above command every time you make an update**
 1. press Ctrl+shift+p to view command pallate
 2. type Preferences: Open Keyboard Shortcut (JSON)
 3. update your keybindings.json file with this
@@ -83,6 +91,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Contact
 
-For questions or suggestions, feel free to reach out.
+For questions or suggestions, feel free to reach out to [me](mailto:k.asid721011@gmail.com).
+
 
 Enjoy playing Platformer-SDL-C!
