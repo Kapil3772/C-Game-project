@@ -32,7 +32,7 @@ cd C-Game-project
 
 3. Compile the project:
 ```sh
-gcc -o build/game main.c src/gameFilesanimations.c src/gameFiles/gameEntities.c src/gameFiles/utils.c src/gameFiles/audios.c -I./src/include/SDL2 -L./src/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
+g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c src/gameFiles/animations.c src/gameFiles/utils.c src/gameFiles/audios.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 ```
 
 4. Run the game:

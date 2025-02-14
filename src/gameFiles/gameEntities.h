@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 #include <stdbool.h>
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
 
 // Game fundamentals Constants
 #define PLAYER_POS_X 171
@@ -50,11 +50,11 @@ typedef enum
     COLLISION_RIGHT = 1 << 3
 } CollisionSide;
 
-typedef struct {
+typedef struct
+{
     SDL_Rect *rect;
     CollisionSide collision;
 } colliding_object;
-
 
 // Function to check collision between two SDL_Rects
 CollisionSide collisionCheck(SDL_Rect *, SDL_Rect *);
@@ -65,7 +65,6 @@ float game_min(float, float);
 // Functions to update and render player
 void updatePlayer(SDL_Rect *, int movement_x, int movement_y, SDL_Rect *collision_area, SDL_Rect *collision_area2, SDL_Rect *collision_area3, SDL_Rect *collision_area4, SDL_Rect *collision_area5, SDL_Rect *collision_area6, bool isJumping);
 void renderPlayer(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect *rect);
-
 
 // Function to clean up game entities
 

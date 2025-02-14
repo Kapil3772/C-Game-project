@@ -1,7 +1,6 @@
 #include "gameEntities.h"
 #include "animations.h"
 #include "utils.h"
-#include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include <stdio.h>
 
