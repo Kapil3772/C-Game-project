@@ -34,12 +34,30 @@ cd C-Game-project
 ```sh
 g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c src/gameFiles/animations.c src/gameFiles/utils.c src/gameFiles/audios.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 ```
-
 4. Run the game:
 ```sh
-cd build
-./game
+./build/game.exe
 ```
+**OR** you could run the task.json file to compile and run using few key bindings
+  Step 1. press Ctrl+shift+p to view command pallate
+  Step 2. type Preferences: Open Keyboard Shortcut (JSON)
+  Step 3. update your keybindings.json file with this
+  ```sh
+  [
+    {
+        "key": "ctrl+shift+b",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Build Game"
+    },
+    {
+        "key": "ctrl+shift+r",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Run Game"
+    }
+  ]
+  ```
+  Now you can build your game by pressing **Ctrl+Shift+b**
+  and run your game by pressing **Ctrl+Shift+r**
 
 ## Usage
 
