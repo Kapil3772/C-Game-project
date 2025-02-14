@@ -39,8 +39,7 @@ g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c sr
 ./build/game.exe
 ```
 ### OR 
-you could run the task.json file to compile and run using few key bindings
-  **so that you dont have to manually type the above command every time you make an update**
+you could run the task.json file to compile and run using few key bindings  **so that you dont have to manually type the above command every time you make an update**
 1. press Ctrl+shift+p to view command pallate
 2. type Preferences: Open Keyboard Shortcut (JSON)
 3. update your keybindings.json file with this
