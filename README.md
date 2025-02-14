@@ -38,10 +38,11 @@ g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c sr
 ```sh
 ./build/game.exe
 ```
-**OR** you could run the task.json file to compile and run using few key bindings
-  Step 1. press Ctrl+shift+p to view command pallate
-  Step 2. type Preferences: Open Keyboard Shortcut (JSON)
-  Step 3. update your keybindings.json file with this
+### OR 
+you could run the task.json file to compile and run using few key bindings
+1. press Ctrl+shift+p to view command pallate
+2. type Preferences: Open Keyboard Shortcut (JSON)
+3. update your keybindings.json file with this
   ```sh
   [
     {
