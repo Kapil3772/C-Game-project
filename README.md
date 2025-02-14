@@ -5,7 +5,11 @@ This is a space to learn game development in C Language
 ## How to build(Compile) the main.c file
 
 Step1: **cd C-Game-project** Go to the clonewd directory
-Step 2: **g++ -Isrc/include -Lsrc/lib -o build/game main.c -lmingw32 -lSDL2main -lSDL2** Paste this command
+    ```sh
+    git clone https://github.com/Kapil3772/C-Game-project.git
+    cd C-GAME-PROJECT
+    ```
+Step 2: **g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c src/gameFiles/animations.csrc/gameFiles/utils.c src/gameFiles/audios.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer** Paste this command
 Step 3: **cd build** go to the build directory where the executable is bulded...
 Step 4: **./game** or **./game.exe** to run the executable file...
 
