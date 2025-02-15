@@ -65,7 +65,8 @@ you could run the task.json file to compile and run using few key bindings <br> 
     }
   ]
   ```
-  <br> and make a **task.json** file <br> <span title="Press Ctrl+Shift+p, Search Tasks: Configure task and paste the code below ", style="color: blue;">HOW TO MAKE task.json FILE ? (!!Hover Here!!)</span>
+  <br> and make a **task.json** file <br> <span title="Press Ctrl+Shift+P, Search Tasks: Configure task and paste the code below" style="color: blue;">HOW TO MAKE task.json FILE ? (!!Hover Here!!)</span>
+
   ```sh
   {
     "version": "2.0.0",
