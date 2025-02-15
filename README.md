@@ -65,6 +65,7 @@ you could run the task.json file to compile and run using few key bindings <br> 
     }
   ]
   ```
+  <br> and make a **task.json** file<span title="This is the hover text">Hover over this text</span>
   Now you can build your game by pressing **Ctrl+Shift+b**
   and run your game by pressing **Ctrl+Shift+r**
 
