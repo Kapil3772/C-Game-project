@@ -65,7 +65,52 @@ you could run the task.json file to compile and run using few key bindings <br> 
     }
   ]
   ```
-  <br> and make a **task.json** file<span title="This is the hover text">Hover over this text</span>
+  <br> and make a **task.json** file **<span title="Press Ctrl+Shift+p, Search Tasks: Configure task and paste the code below ", style="color: blue;">HOW TO MAKE task.json FILE ? (!!Hover Here!!)</span>**
+  ```sh
+  {
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Game",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-Isrc/include",
+                "-Lsrc/lib",
+                "-o",
+                "build/game",
+                "main.c",
+                "src/gameFiles/gameEntities.c",
+                "src/gameFiles/animations.c",
+                "src/gameFiles/utils.c",
+                "src/gameFiles/audios.c",      
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-lSDL2_image",
+                "-lSDL2_mixer"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the game executable"
+        },
+        {
+            "label": "Run Game",
+            "type": "shell",
+            "command": "./build/game.exe",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+  }
+
+  ```
   Now you can build your game by pressing **Ctrl+Shift+b**
   and run your game by pressing **Ctrl+Shift+r**
 
