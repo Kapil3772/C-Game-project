@@ -343,6 +343,7 @@ int main(int argc, char **argv)
     }
 
     // Clean up
+    cleanUpAudio();
     cleanUp();
     return 0;
 }

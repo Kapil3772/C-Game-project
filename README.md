@@ -29,28 +29,36 @@ A visually appealing and interactive platformer game built with SDL2 for a C cla
 ### Installation
 
 1. Clone the repository:
-```sh
-git clone https://github.com/Kapil3772/C-Game-project.git
-cd C-Game-project
-```
+
+ ```sh
+ git clone https://github.com/Kapil3772/C-Game-project.git
+ cd C-Game-project
+ ```
 
 2. Ensure SDL2, SDL2_image, SDL2_mixer libraries are properly set up:
     - SDL2 directory: Contains SDL2, SDL2_image, SDL2_mixer header files
     - lib directory: Contains library files (libSDL2.a, libSDL2.dll, etc.)
 
 3. Compile the project:
+
 ```sh
 g++ -Isrc/include -Lsrc/lib -o build/game main.c src/gameFiles/gameEntities.c src/gameFiles/animations.c src/gameFiles/utils.c src/gameFiles/audios.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 ```
+
 4. Run the game:
+
 ```sh
 ./build/game.exe
 ```
-### OR 
+
+### OR
+
 you could run the task.json file to compile and run using few key bindings <br> **so that you dont have to manually type the above command every time you make an update**
+
 1. press Ctrl+shift+p to view command pallate
 2. type Preferences: Open Keyboard Shortcut (JSON)
 3. update your keybindings.json file with this
+
   ```sh
   [
     {
@@ -65,6 +73,7 @@ you could run the task.json file to compile and run using few key bindings <br> 
     }
   ]
   ```
+
   <br> and make a **task.json** file <br> <span title="Press Ctrl+Shift+P, Search Tasks: Configure task and paste the code below" style="color: blue;">HOW TO MAKE task.json FILE ? (!!Hover Here!!)</span>
 
   ```sh
@@ -112,13 +121,14 @@ you could run the task.json file to compile and run using few key bindings <br> 
   }
 
   ```
+
   Now you can build your game by pressing **Ctrl+Shift+b**
   and run your game by pressing **Ctrl+Shift+r**
 
 ## Usage
 
 - **Welcome Screen**: Press "E" key to start
-- **Controls**: 
+- **Controls**:
   - Arrow keys to move and jump
 - **Objective**: Navigate platforms and avoid obstacles
 - **Game End**: Displays win/lose message based on outcome
@@ -139,6 +149,5 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Contact
 
 For questions or suggestions, feel free to reach out to [me](mailto:k.asid721011@gmail.com).
-
 
 Enjoy playing Platformer-SDL-C!

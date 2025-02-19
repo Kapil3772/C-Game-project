@@ -36,6 +36,8 @@ void cleanUpAudio(void)
 {
     Mix_FreeMusic(bg_music);
     bg_music = NULL;
+    Mix_FreeChunk(jump);
+    jump = NULL;
     Mix_CloseAudio();
     Mix_Quit();
 }
