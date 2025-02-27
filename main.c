@@ -297,21 +297,6 @@ int main(int argc, char **argv)
 
         // Rendering
         SDL_RenderCopy(renderer, gameBackground, NULL, &window_rect);
-        
-        // if (collisionCheck(&player_hitbox, &collision_area))
-        // {
-        //     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        // }
-        // else
-        // {
-        //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        // }
-        // SDL_RenderDrawRect(renderer, &collision_area);
-        // SDL_RenderDrawRect(renderer, &collision_area2);
-        // SDL_RenderDrawRect(renderer, &collision_area3);
-        // SDL_RenderDrawRect(renderer, &collision_area4);
-        // SDL_RenderDrawRect(renderer, &collision_area5);
-        // SDL_RenderDrawRect(renderer, &collision_area6);
         renderPlayer(renderer, player_texture, &player_hitbox);
 
         SDL_RenderCopy(renderer, bg_parallax, NULL, &parallax_rect);
