@@ -7,8 +7,9 @@ A visually appealing and interactive platformer game built with SDL2 for a C cla
 ![Loading Screen](data/screenshots/loading_screen.png)
 *Loading screen*
 
-[![Game Preview](data/screenshots/game_preview.png)](https://streamable.com/5jxrrz)
-*Preview of the game "click above"*
+## Gameplay Preview
+
+<img src="data/images/gifs/gameplay.gif">
 
 ## Features
 
